@@ -1,0 +1,39 @@
+# FRAMED Configuration
+name: framed
+
+structure:
+  root:
+    required:
+      - README.md
+      - framed.yaml
+      - go.mod
+      - go.sum
+      - .gitignore
+    children:
+      - src:
+          required:
+            pattern: "*.go"
+            files:
+              - main.go
+          forbidden:
+            pattern: "*_test.go" # Disallow tests in /src
+      - pipelines:
+          required:
+            pattern:
+              - "*.yml"
+              - "*.yaml" # only yaml files allowed
+            files:
+              - deployment.yaml
+              - pr.yaml
+      - dockerfiles:
+          required:
+            pattern:
+              - "*.dockerfile"
+            minCount: 1 # At least one file has to be there
+      - docs:
+          required:
+            maxCount: 10 # No more than 10 files per dir
+            allowChildren: true
+            pattern:
+              - "*.md"
+              - "*.txt"
