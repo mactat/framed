@@ -3,6 +3,7 @@ name: framed
 
 structure:
   root:
+    maxDepth: 5 # Disallow dirs deeper than 5
     required:
       - README.md
       - framed.yaml
@@ -33,7 +34,7 @@ structure:
       - docs:
           required:
             maxCount: 10 # No more than 10 files per dir
-            allowChildren: true
+            allowChildren: true # Allow subdirectories creation, default false
             pattern:
               - "*.md"
               - "*.txt"
