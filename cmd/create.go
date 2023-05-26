@@ -4,8 +4,6 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -23,14 +21,8 @@ to quickly create a Cobra application.`,
 		path := cmd.Flag("template").Value.String()
 		createFiles := cmd.Flag("files").Value.String() == "true"
 
-		config := readYaml(path)
-		name := config.(map[string]interface{})["name"]
-		fmt.Printf("%-35s %-15s\n", "✅ Loading template from  ==>", path)
-		fmt.Printf("%-35s %-15s\n\n", "✅ Creating structure for ==>", name)
-		dirsList := []SingleDir{}
-
-		// traverse the structure to flatten it
-		traverseStructure(config.(map[string]interface{})["structure"].(map[string]interface{})["root"], ".", &dirsList)
+		// read config
+		dirsList := readConfig(path)
 
 		// create directories
 		for _, dir := range dirsList {

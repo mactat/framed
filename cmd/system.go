@@ -34,3 +34,24 @@ func createFile(path string, name string) {
 		defer file.Close()
 	}
 }
+
+// Check if directory exists on given path and is type dir
+func dirExists(path string) bool {
+	if path == "." {
+		return true
+	}
+	info, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return info.IsDir()
+}
+
+// Check if file exists on given path and is type file
+func fileExists(path string) bool {
+	info, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return !info.IsDir()
+}

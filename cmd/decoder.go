@@ -33,6 +33,19 @@ type SingleDir struct {
 	allowChildren bool      `mapstructure:"allowChildren"`
 }
 
+func readConfig(path string) []SingleDir {
+	config := readYaml(path)
+	name := config.(map[string]interface{})["name"]
+	nameString := fmt.Sprintf("%v", name)
+	print("✅ Loading template from  ==>", path)
+	print("✅ Creating structure for ==>", nameString+"\n")
+	dirsList := []SingleDir{}
+
+	// traverse the structure to flatten it
+	traverseStructure(config.(map[string]interface{})["structure"].(map[string]interface{})["root"], ".", &dirsList)
+	return dirsList
+}
+
 func readYaml(path string) interface{} {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
