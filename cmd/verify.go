@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -24,30 +25,51 @@ to quickly create a Cobra application.`,
 		// read config
 		dirsList := readConfig(path)
 
-		allDirsFound := true
+		allGood := true
 		// verify directories
 		for _, dir := range dirsList {
 			if !dirExists(dir.Path) {
 				print("❌ Directory not found ==>", dir.Path)
-				allDirsFound = false
+				allGood = false
 			}
-		}
 
-		allFilesFound := true
-		// verify files
-		for _, dir := range dirsList {
+			// verify files
 			for _, file := range dir.Required.Files {
 				if !fileExists(dir.Path + "/" + file) {
 					print("❌ File not found      ==>", dir.Path+"/"+file)
-					allFilesFound = false
+					allGood = false
 				}
+			}
+
+			// verify minCount and maxCount
+			numFiles := countFiles(dir.Path)
+			if numFiles < dir.MinCount {
+				print("❌ Min count ("+fmt.Sprint(dir.MinCount)+") not met ==>", dir.Path)
+				allGood = false
+			}
+			if numFiles > dir.MaxCount {
+				print("❌ Max count ("+fmt.Sprint(dir.MaxCount)+") exceeded ==>", dir.Path)
+				allGood = false
+			}
+
+			// verify childrenAllowed
+			if !dir.AllowChildren {
+				if hasDirs(dir.Path) {
+					print("❌ Children not allowed ==>", dir.Path)
+					allGood = false
+				}
+			}
+
+			// verify maxDepth
+			if checkDepth(dir.Path) > dir.MaxDepth {
+				print("❌ Max depth exceeded ("+fmt.Sprint(dir.MaxDepth)+") ==>", dir.Path)
+				allGood = false
 			}
 		}
 
-		if allDirsFound && allFilesFound {
-			println("✅ All directories and files found")
+		if allGood {
+			fmt.Println("✅ Verified successfully!")
 		} else {
-			println("\n❌ Some directories or files not found")
 			os.Exit(1)
 		}
 	},

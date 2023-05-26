@@ -30,7 +30,7 @@ type SingleDir struct {
 	MinCount      int       `mapstructure:"minCount"`
 	MaxCount      int       `mapstructure:"maxCount"`
 	MaxDepth      int       `mapstructure:"maxDepth"`
-	allowChildren bool      `mapstructure:"allowChildren"`
+	AllowChildren bool      `mapstructure:"allowChildren"`
 }
 
 func readConfig(path string) []SingleDir {
@@ -38,7 +38,7 @@ func readConfig(path string) []SingleDir {
 	name := config.(map[string]interface{})["name"]
 	nameString := fmt.Sprintf("%v", name)
 	print("✅ Loading template from  ==>", path)
-	print("✅ Creating structure for ==>", nameString+"\n")
+	print("✅ Reading structure for ==>", nameString+"\n")
 	dirsList := []SingleDir{}
 
 	// traverse the structure to flatten it
@@ -71,7 +71,7 @@ func newSingleDir() SingleDir {
 	singleDir.MaxDepth = 1000
 	singleDir.MaxCount = 1000
 	singleDir.MinCount = 0
-	singleDir.allowChildren = false
+	singleDir.AllowChildren = false
 	return singleDir
 }
 
@@ -103,7 +103,6 @@ func traverseStructure(data interface{}, path string, dirsList *[]SingleDir) {
 		return
 	}
 	for _, value := range children.([]interface{}) {
-		// fmt.Println(value)
 		for name, body := range value.(map[string]interface{}) {
 			traverseStructure(body, path+"/"+name, dirsList)
 		}

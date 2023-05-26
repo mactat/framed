@@ -3,7 +3,8 @@ name: framed
 
 structure:
   root:
-    maxDepth: 5 # Disallow dirs deeper than 5
+    maxDepth: 3 # Disallow dirs deeper than 3
+    allowChildren: true
     required:
       files:
         - README.md
@@ -21,12 +22,12 @@ structure:
             patterns:
               - "*_test.go" # Disallow tests in /src
       - pipelines:
+          maxCount: 2
           required:
             patterns:
               - "*.yml"
               - "*.yaml" # only yaml files allowed
             files:
-              - deployment.yaml
               - pr.yaml
       - dockerfiles:
           minCount: 1 # At least one file has to be there
@@ -37,11 +38,12 @@ structure:
           maxCount: 10 # No more than 10 files per dir
           allowChildren: true # Allow subdirectories creation, default false
           children:
-            - test2:
-            - test1:
+            - design:
+            - examples:
+                allowChildren: true
                 required:
                   files:
-                    - test
+                    - example1.md
           required:
             patterns:
               - "*.md"
