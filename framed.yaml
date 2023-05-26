@@ -15,12 +15,10 @@ structure:
     children:
       - cmd:
           required:
-            patterns: 
+            patterns:
               - "*.go"
-            files:
-              - main.go
           forbidden:
-            patterns: 
+            patterns:
               - "*_test.go" # Disallow tests in /src
       - pipelines:
           required:

@@ -21,10 +21,12 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
+		createFiles := cmd.Flag("files").Value.String() == "true"
+
 		config := readYaml(path)
 		name := config.(map[string]interface{})["name"]
-		fmt.Println("Creating project structure for ==> ", name, " <==")
-		fmt.Println("Loading template from ==> ", path, " <==")
+		fmt.Printf("%-35s %-15s\n", "✅ Loading template from  ==>", path)
+		fmt.Printf("%-35s %-15s\n\n", "✅ Creating structure for ==>", name)
 		dirsList := []SingleDir{}
 
 		// traverse the structure to flatten it
@@ -33,6 +35,15 @@ to quickly create a Cobra application.`,
 		// create directories
 		for _, dir := range dirsList {
 			createDir(dir.Path)
+		}
+
+		// create files
+		if createFiles {
+			for _, dir := range dirsList {
+				for _, file := range dir.Required.Files {
+					createFile(dir.Path, file)
+				}
+			}
 		}
 	},
 }
@@ -43,4 +54,6 @@ func init() {
 	// Here you will define your flags and configuration settings.
 
 	createCmd.PersistentFlags().String("template", "./framed.yaml", "Path to template file default is ./framed.yaml")
+	// add flag to create required files
+	createCmd.PersistentFlags().Bool("files", false, "Create required files")
 }
