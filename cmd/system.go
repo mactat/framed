@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strings"
 )
 
@@ -64,7 +65,13 @@ func countFiles(path string) int {
 	if err != nil {
 		log.Fatal(err)
 	}
-	return len(files)
+	filesCount := 0
+	for _, file := range files {
+		if !file.IsDir() {
+			filesCount++
+		}
+	}
+	return filesCount
 }
 
 func hasDirs(path string) bool {
@@ -99,4 +106,28 @@ func checkDepth(path string) int {
 		log.Println(err)
 	}
 	return maxDepth
+}
+
+func matchPatternInDir(path string, pattern string) []string {
+	if pattern == "" {
+		pattern = ".*"
+	}
+	// List all files in directory
+	files, err := os.ReadDir(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+	matched := []string{}
+	for _, file := range files {
+		if !file.IsDir() {
+			match, err := regexp.MatchString(pattern, file.Name())
+			if err != nil {
+				log.Fatal(err)
+			}
+			if match {
+				matched = append(matched, file.Name())
+			}
+		}
+	}
+	return matched
 }

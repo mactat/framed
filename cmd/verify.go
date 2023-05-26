@@ -6,6 +6,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -63,6 +64,27 @@ to quickly create a Cobra application.`,
 			// verify maxDepth
 			if checkDepth(dir.Path) > dir.MaxDepth {
 				print("❌ Max depth exceeded ("+fmt.Sprint(dir.MaxDepth)+") ==>", dir.Path)
+				allGood = false
+			}
+
+			// Verify forbidden
+			for _, pattern := range dir.Forbidden.Patterns {
+				matched := matchPatternInDir(dir.Path, pattern)
+				for _, match := range matched {
+					print("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
+					allGood = false
+				}
+			}
+
+			// Verify required
+			matchedCount := 0
+			for _, pattern := range dir.Required.Patterns {
+				matched := matchPatternInDir(dir.Path, pattern)
+				matchedCount += len(matched)
+			}
+			if matchedCount != countFiles(dir.Path) && len(dir.Required.Patterns) > 0 {
+				patternsString := strings.Join(dir.Required.Patterns, " ")
+				print("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
 				allGood = false
 			}
 		}
