@@ -6,7 +6,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
+	"os"
 
 	"github.com/mitchellh/mapstructure"
 	"gopkg.in/yaml.v3"
@@ -49,7 +49,9 @@ func readConfig(path string) []SingleDir {
 func readYaml(path string) interface{} {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
+		// add emoji
+		print("☠️  Can't read file ==>", path)
+		os.Exit(1)
 	}
 	// Map to store the parsed YAML data
 	var data map[string]interface{}
@@ -57,7 +59,8 @@ func readYaml(path string) interface{} {
 	// Unmarshal the YAML string into the data map
 	err = yaml.Unmarshal([]byte(yamlFile), &data)
 	if err != nil {
-		fmt.Println(err)
+		print("☠️  Can't decode file ==>", path)
+		os.Exit(1)
 	}
 	return data
 }
@@ -78,7 +81,8 @@ func decodeSingleDir(data interface{}) SingleDir {
 	// decode
 	err := mapstructure.Decode(data, &decoded)
 	if err != nil {
-		panic(err)
+		fmt.Println("☠️  Wrong structure in template file")
+		os.Exit(1)
 	}
 	return decoded
 }
