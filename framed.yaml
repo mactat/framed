@@ -5,36 +5,46 @@ structure:
   root:
     maxDepth: 5 # Disallow dirs deeper than 5
     required:
-      - README.md
-      - framed.yaml
-      - go.mod
-      - go.sum
-      - .gitignore
+      files:
+        - README.md
+        - framed.yaml
+        - main.go
+        - go.mod
+        - go.sum
+        - .gitignore
     children:
-      - src:
+      - cmd:
           required:
-            pattern: "*.go"
+            patterns: 
+              - "*.go"
             files:
               - main.go
           forbidden:
-            pattern: "*_test.go" # Disallow tests in /src
+            patterns: 
+              - "*_test.go" # Disallow tests in /src
       - pipelines:
           required:
-            pattern:
+            patterns:
               - "*.yml"
               - "*.yaml" # only yaml files allowed
             files:
               - deployment.yaml
               - pr.yaml
       - dockerfiles:
+          minCount: 1 # At least one file has to be there
           required:
-            pattern:
+            patterns:
               - "*.dockerfile"
-            minCount: 1 # At least one file has to be there
       - docs:
+          maxCount: 10 # No more than 10 files per dir
+          allowChildren: true # Allow subdirectories creation, default false
+          children:
+            - test2:
+            - test1:
+                required:
+                  files:
+                    - test
           required:
-            maxCount: 10 # No more than 10 files per dir
-            allowChildren: true # Allow subdirectories creation, default false
-            pattern:
+            patterns:
               - "*.md"
               - "*.txt"

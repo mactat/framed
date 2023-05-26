@@ -45,17 +45,22 @@ structure:
               - deployment.yaml
               - pr.yaml
       - dockerfiles:
+          minCount: 1 # At least one file has to be there
           required:
             pattern:
               - "*.dockerfile"
-            minCount: 1 # At least one file has to be there
       - docs:
+          maxCount: 10 # No more than 10 files per dir
+          allowChildren: true
           required:
-            maxCount: 10 # No more than 10 files per dir
-            allowChildren: true
             pattern:
               - "*.md"
               - "*.txt"
+      - other:
+          template: other.yaml # Use another template for this dir
+      - another:
+          template: https://github.com/mactat/framed/blob/master/framed.yaml # Share templates between projects
+
 ```
 
 1. **Project Structure Definition**: FRAMED allows you to define the desired structure of your project using a YAML-based configuration file. The configuration specifies the required files and directories that should exist in the project.
