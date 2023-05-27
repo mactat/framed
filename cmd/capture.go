@@ -1,11 +1,11 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -21,7 +21,22 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("capture called")
+		output := cmd.Flag("output").Value.String()
+		fmt.Println(output)
+
+		// capture subdirectories
+		subdirs := captureSubDirs(".")
+		fmt.Printf("Subdirs:\n\n%+v\n\n", strings.Join(subdirs, "\n"))
+
+		// capture files
+		files := captureAllFiles(".")
+		fmt.Printf("Files:\n\n%+v\n\n", strings.Join(files, "\n"))
+
+		// capture patterns
+		patterns := captureRequiredPatterns(".")
+		for dir, pattern := range patterns {
+			fmt.Printf("Pattern Found: %s in %s\n", pattern, dir)
+		}
 	},
 }
 
@@ -29,12 +44,5 @@ func init() {
 	rootCmd.AddCommand(captureCmd)
 
 	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// captureCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
 	captureCmd.PersistentFlags().String("output", "./framed.yaml", "Path to output file default is ./framed.yaml")
 }

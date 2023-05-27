@@ -131,3 +131,69 @@ func matchPatternInDir(path string, pattern string) []string {
 	}
 	return matched
 }
+
+// Capture all subdirectories in given directory
+func captureSubDirs(path string) []string {
+	var dirs []string
+	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() && info.Name() == ".git" {
+			return filepath.SkipDir
+		} else if info.IsDir() && info.Name() != "." {
+			dirs = append(dirs, path)
+		}
+		return nil
+	})
+	return dirs
+}
+
+// Capture all files in given directory
+func captureAllFiles(path string) []string {
+	var files []string
+	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() && info.Name() == ".git" {
+			return filepath.SkipDir
+		} else if !info.IsDir() {
+			files = append(files, path)
+		}
+		return nil
+	})
+	return files
+}
+
+// Capture rules for files with same extension in given directory. If all files in subdirectory have the same extension, save the extension to map with directory path as key.
+// It should return map path -> extension
+func captureRequiredPatterns(path string) map[string]string {
+	var rules = make(map[string]string)
+	var dirs []string
+	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if info.IsDir() && info.Name() == ".git" {
+			return filepath.SkipDir
+		} else if info.IsDir() && info.Name() != "." {
+			dirs = append(dirs, path)
+		}
+		return nil
+	})
+	// Check files in dir, if all extensions are the same, save extension to map with dir path as key
+	for _, dir := range dirs {
+		files, err := os.ReadDir(dir)
+		if err != nil {
+			log.Fatal(err)
+		}
+		ext := ""
+		for _, file := range files {
+			if !file.IsDir() {
+				extension := filepath.Ext(file.Name())
+				if ext == "" {
+					ext = extension
+				} else if ext != extension {
+					ext = ""
+					break
+				}
+			}
+		}
+		if ext != "" {
+			rules[dir] = ext
+		}
+	}
+	return rules
+}
