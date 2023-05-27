@@ -141,3 +141,7 @@ To visualize the project structure, run the following command:
 ```bash
 framed visualize
 ```
+
+## Demo
+
+![Demo](./docs/static/demo.gif)
