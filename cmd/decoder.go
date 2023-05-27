@@ -71,7 +71,7 @@ func newSingleDir() SingleDir {
 	singleDir.MaxDepth = 1000
 	singleDir.MaxCount = 1000
 	singleDir.MinCount = 0
-	singleDir.AllowChildren = false
+	singleDir.AllowChildren = true
 	return singleDir
 }
 
