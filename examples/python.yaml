@@ -1,0 +1,22 @@
+# FRAMED Configuration
+name: python_example
+
+structure:
+  root:
+    required:
+      files:
+      - README.md
+      - setup.py
+      - .gitignore
+    children:
+    - docs:
+    - tests:
+        required:
+          files:
+          - __init__.py
+    - package_name:
+        required:
+          files:
+          - __init__.py
+          patterns:
+          - .py

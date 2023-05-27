@@ -4,7 +4,6 @@ name: framed
 structure:
   root:
     maxDepth: 5 # Disallow dirs deeper than 5
-    allowChildren: true
     required:
       files:
         - README.md
@@ -31,15 +30,16 @@ structure:
               - pr.yaml
       - dockerfiles:
           minCount: 1 # At least one file has to be there
+          allowChildren: false # Allow subdirectories creation, default true
           required:
             patterns:
               - ".dockerfile"
       - docs:
           maxCount: 10 # No more than 10 files per dir
-          allowChildren: true # Allow subdirectories creation, default false
           children:
             - design:
           required:
             patterns:
               - ".md"
               - ".txt"
+      - examples:

@@ -1,0 +1,19 @@
+# FRAMED Configuration
+name: structure
+
+structure:
+  root:
+    children:
+    - src:
+        children:
+        - this:
+            children:
+            - is:
+                required:
+                  files:
+                  - test.yaml
+            - test:
+    - test:
+    - docs:
+    - dockerfiles:
+    - examples:

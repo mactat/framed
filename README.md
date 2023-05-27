@@ -81,8 +81,6 @@ structure:
 
 9. **Allowing Children**: The `allowChildren` property, when set to true, permits the presence of additional directories within a specified directory. This provides flexibility for organizing files and directories within the project.
 
-By using FRAMED with the provided configuration, you can ensure that your project adheres to a predefined structure, with the required files and directories in place. This helps maintain consistency, reusability, and organization across different projects or within a single project.
-
 ## Installation
 
 To install FRAMED, follow these steps:
@@ -100,15 +98,23 @@ For detailed installation instructions and alternative installation methods, ref
 
 ## Usage
 
+**Note**: The following commands assume that you have already installed FRAMED and added it to your system's PATH environment variable.
+
+**Note**: By default template file is `framed.yaml`. You can specify a different template file using the `--template` flag f.e `--template path/to/my-template.yaml`.
+
 ### 1. Creating a Project Structure
 
 To create a new project structure using a YAML template, run the following command:
 
 ```bash
-framed create --template <template-file> --output <destination-path>
+framed create
 ```
 
-Replace `<template-file>` with the path to your YAML template file and `<destination-path>` with the directory where you want to generate the project structure.
+If you also want to create required files, run the following command:
+
+```bash
+framed create --files
+```
 
 ### 2. Capturing current project structure
 
@@ -123,7 +129,7 @@ framed capture --output <template-file>
 To test the project structure for consistency and compliance with the YAML template, run the following command:
 
 ```bash
-framed test --template <template-file>
+framed verify
 ```
 
 For a complete list of available commands and usage examples, refer to the [documentation](link-to-full-docs).
@@ -133,5 +139,5 @@ For a complete list of available commands and usage examples, refer to the [docu
 To visualize the project structure, run the following command:
 
 ```bash
-framed visualize --template <template-file>
+framed visualize
 ```
