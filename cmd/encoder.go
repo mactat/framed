@@ -144,15 +144,11 @@ func insertSingleFile(root *SingleDirV2, file string) {
 	}
 	curDirs := root.Dirs
 	curDir := root
-	for i := range subdirPath {
-		if i == len(subdirPath)-1 {
-			// insert file
-			*curDir.Files = append(*curDir.Files, subdirPath[i])
-		} else {
-			curDir = getDir(*curDirs, subdirPath[i])
-			curDirs = curDir.Dirs
-		}
+	for i := 0; i < len(subdirPath)-1; i++ {
+		curDir = getDir(*curDirs, subdirPath[i])
+		curDirs = curDir.Dirs
 	}
+	*curDir.Files = append(*curDir.Files, subdirPath[len(subdirPath)-1])
 
 }
 
