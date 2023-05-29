@@ -21,10 +21,10 @@ to quickly create a Cobra application.`,
 		path := cmd.Flag("template").Value.String()
 
 		// read config
-		dirsList := readConfig(path)
+		_, dirList := readConfig(path)
 
 		// visualize template
-		visualizeTemplate(dirsList)
+		visualizeTemplate(dirList)
 	},
 }
 

@@ -36,13 +36,13 @@ func visualizeTemplate(template []SingleDir) {
 
 		printDirectory(initString, dirDepth, connectorDir, name)
 
-		for num, file := range dir.Required.Files {
+		for num, file := range dir.Files {
 			connector := "├──"
 			if depth > 1 {
 				initString = "│"
 			}
 
-			if num == len(dir.Required.Files)-1 {
+			if num == len(dir.Files)-1 {
 				connector = "└──"
 			}
 

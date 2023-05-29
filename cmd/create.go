@@ -22,17 +22,17 @@ to quickly create a Cobra application.`,
 		createFiles := cmd.Flag("files").Value.String() == "true"
 
 		// read config
-		dirsList := readConfig(path)
+		_, dirList := readConfig(path)
 
 		// create directories
-		for _, dir := range dirsList {
+		for _, dir := range dirList {
 			createDir(dir.Path)
 		}
 
 		// create files
 		if createFiles {
-			for _, dir := range dirsList {
-				for _, file := range dir.Required.Files {
+			for _, dir := range dirList {
+				for _, file := range dir.Files {
 					createFile(dir.Path, file)
 				}
 			}

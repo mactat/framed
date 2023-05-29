@@ -24,18 +24,18 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
 		// read config
-		dirsList := readConfig(path)
+		_, dirList := readConfig(path)
 
 		allGood := true
 		// verify directories
-		for _, dir := range dirsList {
+		for _, dir := range dirList {
 			if !dirExists(dir.Path) {
 				print("❌ Directory not found ==>", dir.Path)
 				allGood = false
 			}
 
 			// verify files
-			for _, file := range dir.Required.Files {
+			for _, file := range dir.Files {
 				if !fileExists(dir.Path + "/" + file) {
 					print("❌ File not found      ==>", dir.Path+"/"+file)
 					allGood = false
@@ -68,7 +68,7 @@ to quickly create a Cobra application.`,
 			}
 
 			// Verify forbidden
-			for _, pattern := range dir.Forbidden.Patterns {
+			for _, pattern := range dir.ForbiddenPatterns {
 				matched := matchPatternInDir(dir.Path, pattern)
 				for _, match := range matched {
 					print("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
@@ -78,12 +78,12 @@ to quickly create a Cobra application.`,
 
 			// Verify required
 			matchedCount := 0
-			for _, pattern := range dir.Required.Patterns {
+			for _, pattern := range dir.AllowedPatterns {
 				matched := matchPatternInDir(dir.Path, pattern)
 				matchedCount += len(matched)
 			}
-			if matchedCount != countFiles(dir.Path) && len(dir.Required.Patterns) > 0 {
-				patternsString := strings.Join(dir.Required.Patterns, " ")
+			if matchedCount != countFiles(dir.Path) && len(dir.AllowedPatterns) > 0 {
+				patternsString := strings.Join(dir.AllowedPatterns, " ")
 				print("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
 				allGood = false
 			}
