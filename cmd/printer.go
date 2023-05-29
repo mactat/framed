@@ -57,6 +57,6 @@ func printDirectory(initString string, dirDepth int, connectorDir string, name s
 }
 
 func printFile(initString string, depth int, connector string, file string) {
-	output := initString + strings.Repeat("    ", depth-1) + connector + " 💽 " + color.Ize(color.Green, file)
+	output := initString + strings.Repeat("    ", depth-1) + connector + " 📄 " + color.Ize(color.Green, file)
 	println(output)
 }

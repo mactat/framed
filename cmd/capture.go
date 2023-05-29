@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -22,21 +21,24 @@ This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		output := cmd.Flag("output").Value.String()
-		fmt.Println(output)
+		name := cmd.Flag("name").Value.String()
+		print("📝 Name:", name+"\n")
 
 		// capture subdirectories
 		subdirs := captureSubDirs(".")
-		fmt.Printf("Subdirs:\n\n%+v\n\n", strings.Join(subdirs, "\n"))
+		print("📂 Directories:", fmt.Sprintf("%v", len(subdirs)))
 
 		// capture files
 		files := captureAllFiles(".")
-		fmt.Printf("Files:\n\n%+v\n\n", strings.Join(files, "\n"))
+		print("📄 Files:", fmt.Sprintf("%v", len(files)))
 
 		// capture patterns
 		patterns := captureRequiredPatterns(".")
-		for dir, pattern := range patterns {
-			fmt.Printf("Pattern Found: %s in %s\n", pattern, dir)
-		}
+		print("🔁 Patterns:", fmt.Sprintf("%v", len(patterns)))
+
+		// export config
+		exportConfig(name, output, subdirs, files, patterns)
+		print("\n✅ Exported to file: ", output)
 	},
 }
 
@@ -44,5 +46,7 @@ func init() {
 	rootCmd.AddCommand(captureCmd)
 
 	// Here you will define your flags and configuration settings.
-	captureCmd.PersistentFlags().String("output", "./framed.yaml", "Path to output file default is ./framed.yaml")
+	captureCmd.PersistentFlags().String("output", "./framed.yaml", "Path to output file")
+
+	captureCmd.PersistentFlags().String("name", "default", "Name of the project")
 }

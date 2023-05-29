@@ -1,0 +1,39 @@
+# FRAMED Configuration
+name: framed
+
+structure:
+    name: root
+    maxDepth: 5 # Disallow dirs deeper than 5
+    files:
+        - README.md
+        - framed.yaml
+        - main.go
+        - go.mod
+        - go.sum
+        - .gitignore
+    dirs:
+        - name: cmd
+          allowedPatterns:
+              - ".go"
+          forbiddenPatterns:
+              - "_test.go" # Disallow tests in /src
+        - name: pipelines
+          maxCount: 2
+          allowedPatterns:
+              - ".yml"
+              - ".yaml" # only yaml files allowed
+          files:
+              - pr.yaml
+        - name: dockerfiles
+          minCount: 1 # At least one file has to be there
+          allowChildren: false # Allow subdirectories creation, default true
+          allowedPatterns:
+              - ".dockerfile"
+        - name: docs
+          maxCount: 10 # No more than 10 files per dir
+          allowedPatterns:
+              - ".md"
+              - ".txt"
+          dirs:
+              - name: design
+        - name: examples
