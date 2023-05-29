@@ -9,6 +9,7 @@ build-docker:
 .PHONY: release
 release:
 	docker run --rm -v $(ROOT):/app golang:$(GO_VERSION)-alpine3.18 /bin/sh -c "cd /app && go build -o ./build/framed ./main.go"
+	sudo chown -R dev-vm:dev-vm ./build
 
 .PHONY: build
 build:
