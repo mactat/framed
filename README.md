@@ -1,23 +1,23 @@
-# FRAMED (Files and Directories Reusability, Architecture, and Management)
+# Framed - Files and Directories Reusability, Architecture, and Management
 
-FRAMED is a powerful CLI tool written in Go that simplifies the organization and management of files and directories in a reusable and architectural manner. It provides YAML templates for defining project structures and enables workflows based on those.
+Framed is a CLI tool that simplifies the organization and management of files and directories in a reusable and architectural manner. It provides YAML templates for defining project structures and enables workflows based on those.
 
-To always be in sync with the YAML template, FRAMED provides a built-in test command that can be used in CI/CD pipelines to verify the project structure.
+To always be in sync with the YAML template, Framed provides a built-in test command that can be used in CI/CD pipelines to verify the project structure.
 
 ## Features
 
-- **YAML Templates**: FRAMED uses YAML templates to define the entire project structure.
+- **YAML Templates**: Framed uses YAML templates to define the entire project structure.
 
-- **Always in Sync**: FRAMED provides a built-in test command that can be used in CI/CD pipelines to verify the project structure and ensure that it is always in sync with the YAML template.
+- **Always in Sync**: Framed provides a built-in test command that can be used in CI/CD pipelines to verify the project structure and ensure that it is always in sync with the YAML template.
 
-- **Consistency Across Projects**: FRAMED offers a consistent way of organizing files and directories across different projects.
+- **Consistency Across Projects**: Framed offers a consistent way of organizing files and directories across different projects.
 
 ## Example configuration
 
-To get started with FRAMED, you can use the following example:
+To get started with Framed, you can use the following example:
 
 ```yaml
-# FRAMED Configuration
+# Framed Configuration
 name: framed
 
 structure:
@@ -69,7 +69,7 @@ structure:
 
 ### Project Structure Definition
 
-FRAMED allows you to define the desired structure of your project using a YAML-based configuration file. The configuration specifies the required files and directories that should exist in the project.
+Framed allows you to define the desired structure of your project using a YAML-based configuration file. The configuration specifies the required files and directories that should exist in the project.
 
 ### Root-level Requirements
 
@@ -105,9 +105,9 @@ The allowChildren property, when set to true, permits the presence of additional
 
 ## Installation
 
-To install FRAMED, follow these steps:
+To install Framed, follow these steps:
 
-1. Download the latest release from the  [FRAMED repository](https://github.com/mactat/framed/releases)
+1. Download the latest release from the  [Framed repository](https://github.com/mactat/framed/releases)
 
 for linux:
 
@@ -123,7 +123,7 @@ for linux:
   tar -xvf framed-linux-<version>.tar.gz
   ```
 
-3. Add the FRAMED binary to your system's PATH environment variable.
+3. Add the Framed binary to your system's PATH environment variable.
 
 for linux:
 
@@ -138,7 +138,7 @@ For detailed installation instructions and alternative installation methods, ref
 
 ## Usage
 
-**Note**: The following commands assume that you have already installed FRAMED and added it to your system's PATH environment variable.
+**Note**: The following commands assume that you have already installed Framed and added it to your system's PATH environment variable.
 
 **Note**: By default template file is `framed.yaml`. You can specify a different template file using the `--template` flag f.e `--template path/to/my-template.yaml`.
 
