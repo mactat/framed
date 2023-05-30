@@ -17,12 +17,11 @@ build-docker:
 build-in-docker:
 	docker run \
 		--rm \
-		--user $(id -u):$(id -g) \
 		-v $(ROOT):/app \
 		--env GOOS=$(OS) \
 		--env GOARCH=$(ARCH) \
 		golang:$(GO_VERSION)-alpine3.18 \
-		/bin/sh -c "cd /app && go build -o ./build/framed ./main.go"
+		/bin/sh -c "cd /app && go build -o ./build/ ./framed.go"
 	sudo chown -R $(USER):$(USER) ./build
 
 .PHONY: release-lin
@@ -47,7 +46,7 @@ release-mac: version
 
 .PHONY: build
 build:
-	go build -o ./build/framed ./main.go
+	go build -o ./build/ ./framed.go
 
 .PHONY: format
 format:

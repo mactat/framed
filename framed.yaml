@@ -7,7 +7,7 @@ structure:
     files:
         - README.md
         - framed.yaml
-        - main.go
+        - framed.go
         - go.mod
         - go.sum
         - .gitignore
