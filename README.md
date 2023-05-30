@@ -1,4 +1,5 @@
-![Logo](./docs/static/logo.png)
+
+<img src="./docs/static/logo.png" height="300">
 
 # Framed - Files and Directories Reusability, Architecture, and Management
 
