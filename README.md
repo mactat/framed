@@ -1,3 +1,5 @@
+![Logo](./docs/static/logo.png)
+
 # Framed - Files and Directories Reusability, Architecture, and Management
 
 Framed is a CLI tool that simplifies the organization and management of files and directories in a reusable and architectural manner. It provides YAML templates for defining project structures and enables workflows based on those.
