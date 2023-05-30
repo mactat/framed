@@ -1,5 +1,5 @@
 
-<img src="./docs/static/logo.png" height="300">
+<img src="./docs/static/logo.png" style="object-fit: cover; width: 100%;">
 
 # Framed - Files and Directories Reusability, Architecture, and Management
 
