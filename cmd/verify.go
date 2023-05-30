@@ -34,11 +34,8 @@ framed verify --template ./framed.yaml
 			}
 
 			// verify files
-			for _, file := range *dir.Files {
-				if !fileExists(dir.Path + "/" + file) {
-					print("❌ File not found      ==>", dir.Path+"/"+file)
-					allGood = false
-				}
+			if dir.Files != nil {
+				verifyFiles(dir, &allGood)
 			}
 
 			// verify minCount and maxCount
@@ -67,24 +64,13 @@ framed verify --template ./framed.yaml
 			}
 
 			// Verify forbidden
-			for _, pattern := range *dir.ForbiddenPatterns {
-				matched := matchPatternInDir(dir.Path, pattern)
-				for _, match := range matched {
-					print("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
-					allGood = false
-				}
+			if dir.ForbiddenPatterns != nil {
+				verifyForbiddenPatterns(dir, &allGood)
 			}
 
-			// Verify required
-			matchedCount := 0
-			for _, pattern := range *dir.AllowedPatterns {
-				matched := matchPatternInDir(dir.Path, pattern)
-				matchedCount += len(matched)
-			}
-			if matchedCount != countFiles(dir.Path) && len(*dir.AllowedPatterns) > 0 {
-				patternsString := strings.Join(*dir.AllowedPatterns, " ")
-				print("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
-				allGood = false
+			// Verify allowed patterns
+			if dir.AllowedPatterns != nil {
+				verifyAllowedPatterns(dir, &allGood)
 			}
 		}
 
@@ -94,6 +80,37 @@ framed verify --template ./framed.yaml
 			os.Exit(1)
 		}
 	},
+}
+
+func verifyFiles(dir SingleDir, allGood *bool) {
+	for _, file := range *dir.Files {
+		if !fileExists(dir.Path + "/" + file) {
+			print("❌ File not found      ==>", dir.Path+"/"+file)
+			*allGood = false
+		}
+	}
+}
+func verifyForbiddenPatterns(dir SingleDir, allGood *bool) {
+	for _, pattern := range *dir.ForbiddenPatterns {
+		matched := matchPatternInDir(dir.Path, pattern)
+		for _, match := range matched {
+			print("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
+			*allGood = false
+		}
+	}
+}
+
+func verifyAllowedPatterns(dir SingleDir, allGood *bool) {
+	matchedCount := 0
+	for _, pattern := range *dir.AllowedPatterns {
+		matched := matchPatternInDir(dir.Path, pattern)
+		matchedCount += len(matched)
+	}
+	if matchedCount != countFiles(dir.Path) && len(*dir.AllowedPatterns) > 0 {
+		patternsString := strings.Join(*dir.AllowedPatterns, " ")
+		print("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
+		*allGood = false
+	}
 }
 
 func init() {

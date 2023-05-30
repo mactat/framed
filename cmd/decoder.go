@@ -4,7 +4,6 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -65,7 +64,6 @@ func readConfig(path string) (Config, []SingleDir) {
 
 	dirList := []SingleDir{}
 	traverseStructure(config.Structure, ".", &dirList)
-	fmt.Println(dirList)
 	return config, dirList
 }
 

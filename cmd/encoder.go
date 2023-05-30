@@ -11,14 +11,33 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+// Consider implementing a custom Unmarshaler for SingleDirOut
+type SingleDirOut struct {
+	Name              string          `yaml:"name"`
+	Path              string          `yaml:"-"`
+	Files             *[]string       `yaml:"files",omitempty`
+	Dirs              *[]SingleDirOut `yaml:"dirs,omitempty"`
+	AllowedPatterns   *[]string       `yaml:"allowedPatterns,omitempty"`
+	ForbiddenPatterns *[]string       `yaml:"forbiddenPatterns,omitempty"`
+	MinCount          int             `yaml:"minCount,omitempty"`
+	MaxCount          int             `yaml:"maxCount,omitempty"`
+	MaxDepth          int             `yaml:"maxDepth,omitempty"`
+	AllowChildren     bool            `yaml:"allowChildren,omitempty"`
+}
+
+type ConfigOut struct {
+	Name      string        `yaml:"name"`
+	Structure *SingleDirOut `yaml:"structure"`
+}
+
 func exportConfig(name string, path string, subdirs []string, files []string, patterns map[string]string) {
 	// create config, files and dirs are empty
-	config := Config{
+	config := ConfigOut{
 		Name: name,
-		Structure: &SingleDir{
+		Structure: &SingleDirOut{
 			Name:  "root",
 			Files: &[]string{},
-			Dirs:  &[]SingleDir{},
+			Dirs:  &[]SingleDirOut{},
 		},
 	}
 	// add subdirs
@@ -43,21 +62,21 @@ func exportConfig(name string, path string, subdirs []string, files []string, pa
 	}
 }
 
-func insertSubdirs(dirs *[]SingleDir, subdirs []string) {
+func insertSubdirs(dirs *[]SingleDirOut, subdirs []string) {
 	for subdir := range subdirs {
 		insertSingleDir(dirs, subdirs[subdir])
 	}
 }
 
-func insertSingleDir(dirs *[]SingleDir, dir string) {
+func insertSingleDir(dirs *[]SingleDirOut, dir string) {
 	subdirPath := strings.Split(dir, "/")
 	curDirs := dirs
 	for i := range subdirPath {
 		if !containsDir(*curDirs, subdirPath[i]) {
-			*curDirs = append(*curDirs, SingleDir{
+			*curDirs = append(*curDirs, SingleDirOut{
 				Name:            subdirPath[i],
 				Files:           &[]string{},
-				Dirs:            &[]SingleDir{},
+				Dirs:            &[]SingleDirOut{},
 				AllowedPatterns: &[]string{},
 			})
 		}
@@ -66,7 +85,7 @@ func insertSingleDir(dirs *[]SingleDir, dir string) {
 	}
 }
 
-func containsDir(dirs []SingleDir, name string) bool {
+func containsDir(dirs []SingleDirOut, name string) bool {
 	for _, dir := range dirs {
 		if dir.Name == name {
 			return true
@@ -75,7 +94,7 @@ func containsDir(dirs []SingleDir, name string) bool {
 	return false
 }
 
-func getDir(dirs []SingleDir, name string) *SingleDir {
+func getDir(dirs []SingleDirOut, name string) *SingleDirOut {
 	for _, dir := range dirs {
 		if dir.Name == name {
 			return &dir
@@ -84,13 +103,13 @@ func getDir(dirs []SingleDir, name string) *SingleDir {
 	return nil
 }
 
-func insertFiles(root *SingleDir, files []string) {
+func insertFiles(root *SingleDirOut, files []string) {
 	for file := range files {
 		insertSingleFile(root, files[file])
 	}
 }
 
-func insertSingleFile(root *SingleDir, file string) {
+func insertSingleFile(root *SingleDirOut, file string) {
 	subdirPath := strings.Split(file, "/")
 
 	if len(subdirPath) == 1 {
@@ -107,13 +126,13 @@ func insertSingleFile(root *SingleDir, file string) {
 
 }
 
-func insertPatterns(root *SingleDir, patterns map[string]string) {
+func insertPatterns(root *SingleDirOut, patterns map[string]string) {
 	for dir, pattern := range patterns {
 		insertSinglePattern(root, dir, pattern)
 	}
 }
 
-func insertSinglePattern(root *SingleDir, dir string, pattern string) {
+func insertSinglePattern(root *SingleDirOut, dir string, pattern string) {
 	subdirPath := strings.Split(dir, "/")
 	curDirs := root.Dirs
 	curDir := root
