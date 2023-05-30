@@ -8,103 +8,79 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/mitchellh/mapstructure"
+	"github.com/creasty/defaults"
 	"gopkg.in/yaml.v3"
 )
 
-type Required struct {
-	Patterns []string `mapstructure:"patterns"`
-	Files    []string `mapstructure:"files"`
-}
-
-type Forbidden struct {
-	Patterns []string `mapstructure:"patterns"`
-	Files    []string `mapstructure:"files"`
-}
-
 // SingleDir struct
 type SingleDir struct {
-	Path          string    `mapstructure:"path"`
-	Required      Required  `mapstructure:"required"`
-	Forbidden     Forbidden `mapstructure:"forbidden"`
-	MinCount      int       `mapstructure:"minCount"`
-	MaxCount      int       `mapstructure:"maxCount"`
-	MaxDepth      int       `mapstructure:"maxDepth"`
-	AllowChildren bool      `mapstructure:"allowChildren"`
+	Name              string       `yaml:"name"`
+	Path              string       `yaml:"path"`
+	Files             *[]string    `yaml:"files"`
+	Dirs              *[]SingleDir `yaml:"dirs"`
+	AllowedPatterns   *[]string    `yaml:"allowedPatterns"`
+	ForbiddenPatterns *[]string    `yaml:"forbiddenPatterns"`
+	MinCount          int          `default:"0" yaml:"minCount"`
+	MaxCount          int          `default:"1000" yaml:"maxCount"`
+	MaxDepth          int          `default:"1000" yaml:"maxDepth"`
+	AllowChildren     bool         `default:"true" yaml:"allowChildren"`
 }
 
-func readConfig(path string) []SingleDir {
-	config := readYaml(path)
-	name := config.(map[string]interface{})["name"]
-	nameString := fmt.Sprintf("%v", name)
-	print("✅ Loading template from  ==>", path)
-	print("✅ Reading structure for ==>", nameString+"\n")
-	dirsList := []SingleDir{}
+// UnmarshalYAML implements yaml.Unmarshaler interface
+// Meant for initializing default values
+func (s *SingleDir) UnmarshalYAML(unmarshal func(interface{}) error) error {
+	defaults.Set(s)
 
-	// traverse the structure to flatten it
-	traverseStructure(config.(map[string]interface{})["structure"].(map[string]interface{})["root"], ".", &dirsList)
-	return dirsList
+	type plain SingleDir
+	if err := unmarshal((*plain)(s)); err != nil {
+		return err
+	}
+
+	return nil
 }
 
-func readYaml(path string) interface{} {
+type Config struct {
+	Name      string     `yaml:"name"`
+	Structure *SingleDir `yaml:"structure"`
+}
+
+func readConfig(path string) (Config, []SingleDir) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		// add emoji
 		print("☠️  Can't read file ==>", path)
 		os.Exit(1)
 	}
+	print("✅ Loaded template from  ==>", path)
 	// Map to store the parsed YAML data
-	var data map[string]interface{}
+	var config Config
 
 	// Unmarshal the YAML string into the data map
-	err = yaml.Unmarshal([]byte(yamlFile), &data)
+	err = yaml.Unmarshal([]byte(yamlFile), &config)
 	if err != nil {
 		print("☠️  Can't decode file ==>", path)
 		os.Exit(1)
 	}
-	return data
+	print("✅ Read structure for ==>", config.Name)
+
+	dirList := []SingleDir{}
+	traverseStructure(config.Structure, ".", &dirList)
+	fmt.Println(dirList)
+	return config, dirList
 }
 
-func newSingleDir() SingleDir {
-	singleDir := SingleDir{}
-	// set default values
-	singleDir.MaxDepth = 1000
-	singleDir.MaxCount = 1000
-	singleDir.MinCount = 0
-	singleDir.AllowChildren = true
-	return singleDir
-}
+func traverseStructure(dir *SingleDir, path string, dirsList *[]SingleDir) {
+	// Chanage path
+	dir.Path = path
 
-func decodeSingleDir(data interface{}) SingleDir {
-	decoded := newSingleDir()
+	// add current dir to dirsList
+	*dirsList = append(*dirsList, *dir)
 
-	// decode
-	err := mapstructure.Decode(data, &decoded)
-	if err != nil {
-		fmt.Println("☠️  Wrong structure in template file")
-		os.Exit(1)
-	}
-	return decoded
-}
-
-func traverseStructure(data interface{}, path string, dirsList *[]SingleDir) {
-	// decode current dir
-	single := decodeSingleDir(data)
-	single.Path = path
-	*dirsList = append(*dirsList, single)
-
-	// dir def without any properties by checking the type
-	if _, ok := data.(map[string]interface{}); !ok {
+	if dir.Dirs == nil {
 		return
 	}
-	// decode children
-	children, ok := data.(map[string]interface{})["children"]
-	if !ok {
-		return
-	}
-	for _, value := range children.([]interface{}) {
-		for name, body := range value.(map[string]interface{}) {
-			traverseStructure(body, path+"/"+name, dirsList)
-		}
+	// traverse children
+	for _, child := range *dir.Dirs {
+		traverseStructure(&child, path+"/"+child.Name, dirsList)
 	}
 }

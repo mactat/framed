@@ -11,28 +11,30 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create a new project structure using a YAML template",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `This command is creating a new project structure from a YAML template.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Example:
+framed create --template ./framed.yaml --files true
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
 		createFiles := cmd.Flag("files").Value.String() == "true"
 
 		// read config
-		dirsList := readConfig(path)
+		_, dirList := readConfig(path)
 
 		// create directories
-		for _, dir := range dirsList {
+		for _, dir := range dirList {
 			createDir(dir.Path)
 		}
 
 		// create files
 		if createFiles {
-			for _, dir := range dirsList {
-				for _, file := range dir.Required.Files {
+			for _, dir := range dirList {
+				if dir.Files == nil {
+					continue
+				}
+				for _, file := range *dir.Files {
 					createFile(dir.Path, file)
 				}
 			}
@@ -45,7 +47,7 @@ func init() {
 
 	// Here you will define your flags and configuration settings.
 
-	createCmd.PersistentFlags().String("template", "./framed.yaml", "Path to template file default is ./framed.yaml")
+	createCmd.PersistentFlags().String("template", "./framed.yaml", "path to template file default")
 	// add flag to create required files
-	createCmd.PersistentFlags().Bool("files", false, "Create required files")
+	createCmd.PersistentFlags().Bool("files", false, "create required files")
 }
