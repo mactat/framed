@@ -11,11 +11,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type Config struct {
-	Name      string     `yaml:"name"`
-	Structure *SingleDir `yaml:"structure,omitempty"`
-}
-
 func exportConfig(name string, path string, subdirs []string, files []string, patterns map[string]string) {
 	// create config, files and dirs are empty
 	config := Config{

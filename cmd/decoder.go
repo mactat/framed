@@ -39,12 +39,12 @@ func (s *SingleDir) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	return nil
 }
 
-type Conf struct {
+type Config struct {
 	Name      string     `yaml:"name"`
 	Structure *SingleDir `yaml:"structure"`
 }
 
-func readConfig(path string) (Conf, []SingleDir) {
+func readConfig(path string) (Config, []SingleDir) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		// add emoji
@@ -53,7 +53,7 @@ func readConfig(path string) (Conf, []SingleDir) {
 	}
 	print("✅ Loaded template from  ==>", path)
 	// Map to store the parsed YAML data
-	var config Conf
+	var config Config
 
 	// Unmarshal the YAML string into the data map
 	err = yaml.Unmarshal([]byte(yamlFile), &config)
