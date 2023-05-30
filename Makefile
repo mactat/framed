@@ -11,7 +11,7 @@ release-lin:
 	docker run --rm -v $(ROOT):/app golang:$(GO_VERSION)-alpine3.18 /bin/sh -c "cd /app && go build -o ./build/framed ./main.go"
 	sudo chown -R $(USER):$(USER) ./build
 	$(eval VERSION := $(shell git describe --tags --abbrev=0 2> /dev/null || git rev-parse --short HEAD))
-	tar -zcvf ./build/framed-linux-$(VERSION).tar.gz ./build/framed
+	cd ./build && tar -zcvf ./framed-linux-$(VERSION).tar.gz ./framed
 	rm ./build/framed
 
 # make release for windows
@@ -20,7 +20,7 @@ release-win:
 	docker run --rm -v $(ROOT):/app golang:$(GO_VERSION)-alpine3.18 /bin/sh -c "cd /app && GOOS=windows GOARCH=amd64 go build -o ./build/framed.exe ./main.go"
 	sudo chown -R $(USER):$(USER) ./build
 	$(eval VERSION := $(shell git describe --tags --abbrev=0 2> /dev/null || git rev-parse --short HEAD))
-	tar -zcvf ./build/framed-windows-$(VERSION).tar.gz ./build/framed.exe
+	cd ./build && tar -zcvf ./build/framed-win-$(VERSION).tar.gz ./build/framed.exe
 	rm -rf ./build/framed.exe
 
 # make release for mac
@@ -29,7 +29,7 @@ release-mac:
 	docker run --rm -v $(ROOT):/app golang:$(GO_VERSION)-alpine3.18 /bin/sh -c "cd /app && GOOS=darwin GOARCH=amd64 go build -o ./build/framed ./main.go"
 	sudo chown -R $(USER):$(USER) ./build
 	$(eval VERSION := $(shell git describe --tags --abbrev=0 2> /dev/null || git rev-parse --short HEAD))
-	tar -zcvf ./build/framed-mac-$(VERSION).tar.gz ./build/framed
+	cd ./build && tar -zcvf ./build/framed-mac-$(VERSION).tar.gz ./build/framed
 	rm ./build/framed
 
 .PHONY: build

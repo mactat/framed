@@ -107,11 +107,29 @@ The allowChildren property, when set to true, permits the presence of additional
 
 To install FRAMED, follow these steps:
 
-1. Download the latest release from the FRAMED repository: [link-to-releases]
+1. Download the latest release from the  [FRAMED repository](https://github.com/mactat/framed/releases)
+
+for linux:
+
+  ```bash
+  wget https://github.com/mactat/framed/releases/download/<version>/framed-linux-<version>.tar.gz
+  ```
 
 2. Extract the downloaded archive to a directory of your choice.
 
+for linux:
+
+  ```bash
+  tar -xvf framed-linux-<version>.tar.gz
+  ```
+
 3. Add the FRAMED binary to your system's PATH environment variable.
+
+for linux:
+
+  ```bash
+  export PATH=$PATH:<path-to-framed-binary>
+  ```
 
 4. Verify the installation by running the following command in your terminal:
 framed --version
