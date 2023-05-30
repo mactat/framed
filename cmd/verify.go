@@ -14,13 +14,12 @@ import (
 // testCmd represents the test command
 var testCmd = &cobra.Command{
 	Use:   "verify",
-	Short: "Verify the project structure for consistency and compliance with the YAML template",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Verify the project rules and structure",
+	Long: `This command is verifying the project structure for consistency and compliance with the YAML template.
+	
+Example:
+framed verify --template ./framed.yaml
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
 		// read config
@@ -35,7 +34,7 @@ to quickly create a Cobra application.`,
 			}
 
 			// verify files
-			for _, file := range dir.Files {
+			for _, file := range *dir.Files {
 				if !fileExists(dir.Path + "/" + file) {
 					print("❌ File not found      ==>", dir.Path+"/"+file)
 					allGood = false
@@ -68,7 +67,7 @@ to quickly create a Cobra application.`,
 			}
 
 			// Verify forbidden
-			for _, pattern := range dir.ForbiddenPatterns {
+			for _, pattern := range *dir.ForbiddenPatterns {
 				matched := matchPatternInDir(dir.Path, pattern)
 				for _, match := range matched {
 					print("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
@@ -78,12 +77,12 @@ to quickly create a Cobra application.`,
 
 			// Verify required
 			matchedCount := 0
-			for _, pattern := range dir.AllowedPatterns {
+			for _, pattern := range *dir.AllowedPatterns {
 				matched := matchPatternInDir(dir.Path, pattern)
 				matchedCount += len(matched)
 			}
-			if matchedCount != countFiles(dir.Path) && len(dir.AllowedPatterns) > 0 {
-				patternsString := strings.Join(dir.AllowedPatterns, " ")
+			if matchedCount != countFiles(dir.Path) && len(*dir.AllowedPatterns) > 0 {
+				patternsString := strings.Join(*dir.AllowedPatterns, " ")
 				print("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
 				allGood = false
 			}
@@ -101,5 +100,5 @@ func init() {
 	rootCmd.AddCommand(testCmd)
 
 	// Here you will define your flags and configuration settings.
-	testCmd.PersistentFlags().String("template", "./framed.yaml", "Path to template file default is ./framed.yaml")
+	testCmd.PersistentFlags().String("template", "./framed.yaml", "path to template file")
 }

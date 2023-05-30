@@ -11,12 +11,10 @@ import (
 var visualizeCmd = &cobra.Command{
 	Use:   "visualize",
 	Short: "Visualize the project structure",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `This command is visualizing the project structure from a YAML template.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Example:
+framed visualize --template ./framed.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
 

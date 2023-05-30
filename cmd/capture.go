@@ -13,12 +13,11 @@ import (
 var captureCmd = &cobra.Command{
 	Use:   "capture",
 	Short: "Capture the current project structure as a YAML template",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Long: `This command is capturing the current project structure as a YAML template.
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+Example:
+framed capture --output ./framed.yaml --name my-project
+`,
 	Run: func(cmd *cobra.Command, args []string) {
 		output := cmd.Flag("output").Value.String()
 		name := cmd.Flag("name").Value.String()
@@ -46,7 +45,7 @@ func init() {
 	rootCmd.AddCommand(captureCmd)
 
 	// Here you will define your flags and configuration settings.
-	captureCmd.PersistentFlags().String("output", "./framed.yaml", "Path to output file")
+	captureCmd.PersistentFlags().String("output", "./framed.yaml", "path to output file")
 
-	captureCmd.PersistentFlags().String("name", "default", "Name of the project")
+	captureCmd.PersistentFlags().String("name", "default", "name of the project")
 }

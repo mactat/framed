@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -15,10 +16,10 @@ import (
 type SingleDir struct {
 	Name              string       `yaml:"name"`
 	Path              string       `yaml:"path"`
-	Files             []string     `yaml:"files"`
+	Files             *[]string    `yaml:"files"`
 	Dirs              *[]SingleDir `yaml:"dirs"`
-	AllowedPatterns   []string     `yaml:"allowedPatterns"`
-	ForbiddenPatterns []string     `yaml:"forbiddenPatterns"`
+	AllowedPatterns   *[]string    `yaml:"allowedPatterns"`
+	ForbiddenPatterns *[]string    `yaml:"forbiddenPatterns"`
 	MinCount          int          `default:"0" yaml:"minCount"`
 	MaxCount          int          `default:"1000" yaml:"maxCount"`
 	MaxDepth          int          `default:"1000" yaml:"maxDepth"`
@@ -64,6 +65,7 @@ func readConfig(path string) (Conf, []SingleDir) {
 
 	dirList := []SingleDir{}
 	traverseStructure(config.Structure, ".", &dirList)
+	fmt.Println(dirList)
 	return config, dirList
 }
 
