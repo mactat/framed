@@ -182,6 +182,28 @@ To visualize the project structure, run the following command:
 framed visualize
 ```
 
+### 5. Importing Project Structure
+
+To import the project structure from url, run the following command:
+
+```bash
+framed import --url <url>
+```
+
+url has to be pointing to a yaml file with valid structure.
+
+To import an example project structure, run the following command:
+
+```bash
+framed import --example <example-name>
+```
+
+Currently available examples:
+
+- python
+
+See [examples](./examples) for more details.
+
 ## Demo
 
 ![Demo](./docs/static/demo.gif)
