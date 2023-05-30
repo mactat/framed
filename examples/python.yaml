@@ -2,21 +2,18 @@
 name: python_example
 
 structure:
-  root:
-    required:
+  name: root
+  files:
+    - README.md
+    - setup.py
+    - .gitignore
+  dirs:
+    - name: docs
+    - name: tests
       files:
-      - README.md
-      - setup.py
-      - .gitignore
-    children:
-    - docs:
-    - tests:
-        required:
-          files:
-          - __init__.py
-    - package_name:
-        required:
-          files:
-          - __init__.py
-          patterns:
-          - .py
+        - __init__.py
+    - name: package_name
+      files:
+        - __init__.py
+      allowedPatterns:
+        - .py

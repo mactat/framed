@@ -2,18 +2,17 @@
 name: structure
 
 structure:
-  root:
-    children:
-    - src:
-        children:
-        - this:
-            children:
-            - is:
-                required:
-                  files:
-                  - test.yaml
-            - test:
-    - test:
-    - docs:
-    - dockerfiles:
-    - examples:
+  name: root
+  dirs:
+    - name: src
+      dirs:
+        - name: this
+          dirs:
+            - name: is
+              files:
+                - test.yaml
+            - name: test
+    - name: test
+    - name: docs
+    - name: dockerfiles
+    - name: examples
