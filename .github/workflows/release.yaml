@@ -1,4 +1,4 @@
-name: onTag
+name: release
 on:
   push:
     tags:

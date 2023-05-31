@@ -1,3 +1,4 @@
+[![onTag](https://github.com/mactat/framed/actions/workflows/release.yaml/badge.svg)](https://github.com/mactat/framed/actions/workflows/release.yaml) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/mactat/framed)
 
 <img src="./docs/static/logo.png" style="object-fit: cover; width: 100%;">
 
@@ -21,9 +22,6 @@ To get started with Framed, you can use the following example:
 
 ```yaml
 # Framed Configuration
-name: framed
-
-structure:
 name: framed
 
 structure:
@@ -62,12 +60,6 @@ structure:
       dirs:
         - name: design
     - name: examples
-
-    - name: other
-      template: other.yaml # Use another template for this dir
-    - name: another
-      template: https://github.com/mactat/framed/blob/master/framed.yaml # Share templates between projects
-
 ```
 
 ### Project Structure Definition
@@ -210,3 +202,24 @@ See [examples](./examples) for more details.
 ## Demo
 
 ![Demo](./docs/static/demo.gif)
+
+## TODO
+
+- [ ] Add support from importing part of the structure from url or file like:
+
+  ```yaml
+  name: framed
+
+  structure:
+    name: root
+    dirs:
+      - name: other
+        template: other.yaml # Use another template for this dir
+      - name: another
+        template: https://yourfile.com/framed.yaml # Share templates between projects
+  ```
+
+- [ ] Add some unit tests and integration tests
+- [ ] Add contributing guidelines
+- [ ] Add more examples
+- [ ] Create a github action for running tests
