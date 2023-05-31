@@ -1,6 +1,8 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 */
+
+// Package cmd represents the command line interface of the application
 package cmd
 
 import (
@@ -38,12 +40,12 @@ func (s *SingleDir) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	return nil
 }
 
-type Config struct {
+type config struct {
 	Name      string     `yaml:"name"`
 	Structure *SingleDir `yaml:"structure"`
 }
 
-func readConfig(path string) (Config, []SingleDir) {
+func readConfig(path string) (config, []SingleDir) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		// add emoji
@@ -52,19 +54,19 @@ func readConfig(path string) (Config, []SingleDir) {
 	}
 	print("✅ Loaded template from  ==>", path)
 	// Map to store the parsed YAML data
-	var config Config
+	var curConfig config
 
 	// Unmarshal the YAML string into the data map
-	err = yaml.Unmarshal([]byte(yamlFile), &config)
+	err = yaml.Unmarshal([]byte(yamlFile), &curConfig)
 	if err != nil {
 		print("☠️  Can't decode file ==>", path)
 		os.Exit(1)
 	}
-	print("✅ Read structure for ==>", config.Name)
+	print("✅ Read structure for ==>", curConfig.Name)
 
 	dirList := []SingleDir{}
-	traverseStructure(config.Structure, ".", &dirList)
-	return config, dirList
+	traverseStructure(curConfig.Structure, ".", &dirList)
+	return curConfig, dirList
 }
 
 func traverseStructure(dir *SingleDir, path string, dirsList *[]SingleDir) {

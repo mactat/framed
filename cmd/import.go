@@ -1,6 +1,8 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 */
+
+// Package cmd represents the command line interface of the application
 package cmd
 
 import (

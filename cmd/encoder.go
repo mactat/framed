@@ -1,6 +1,8 @@
 /*
 Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 */
+
+// Package cmd represents the command line interface of the application
 package cmd
 
 import (
@@ -25,14 +27,14 @@ type SingleDirOut struct {
 	AllowChildren     bool            `yaml:"allowChildren,omitempty"`
 }
 
-type ConfigOut struct {
+type configOut struct {
 	Name      string        `yaml:"name"`
 	Structure *SingleDirOut `yaml:"structure"`
 }
 
 func exportConfig(name string, path string, subdirs []string, files []string, patterns map[string]string) {
 	// create config, files and dirs are empty
-	config := ConfigOut{
+	config := configOut{
 		Name: name,
 		Structure: &SingleDirOut{
 			Name:  "root",
