@@ -1,0 +1,17 @@
+ARG GO_VERSION=1.20.4
+ARG ALPINE_VERSION=3.18
+
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} as builder
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN go build -o framed ./framed.go
+
+FROM alpine:${ALPINE_VERSION} as release
+
+COPY --from=builder /app/framed /bin/framed
+
+WORKDIR /app
+CMD ["/bin/sh"]

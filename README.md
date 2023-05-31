@@ -199,6 +199,21 @@ Currently available examples:
 
 See [examples](./examples) for more details.
 
+## Running from docker
+To run framed from docker, run the following command:
+
+```bash
+docker run --rm -v $(pwd):/app --user $(id -u):$(id -g) mactat/framed framed <command>
+```
+
+example:
+
+```bash
+docker run --rm -v $(pwd):/app --user $(id -u):$(id -g) mactat/framed framed import --example python
+```
+
+Images can be found on [dockerhub](https://hub.docker.com/r/mactat/framed).
+
 ## Demo
 
 ![Demo](./docs/static/demo.gif)
@@ -219,7 +234,7 @@ See [examples](./examples) for more details.
         template: https://yourfile.com/framed.yaml # Share templates between projects
   ```
 
-- [ ] Add some unit tests and integration tests
+- [ ] Add some unit tests
 - [ ] Add contributing guidelines
 - [ ] Add more examples
 - [ ] Create a github action for running tests

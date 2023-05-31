@@ -1,6 +1,7 @@
 # Definitions
 ROOT                    := $(PWD)
 GO_VERSION              := 1.20.4
+ALPINE_VERSION          := 3.18
 OS					  	:= linux
 ARCH                    := amd64
 
@@ -11,38 +12,47 @@ version:
 
 .PHONY: build-docker
 build-docker:
-	docker build -t mactat/framed -f ./dockerfiles/dev.dockerfile .
+	docker build \
+	-t mactat/framed \
+	-f ./dockerfiles/dockerfile \
+	--build-arg GO_VERSION=$(GO_VERSION) \
+	--build-arg ALPINE_VERSION=$(ALPINE_VERSION) \
+	.
+
+.PHONY: release-docker
+release-docker: version build-docker
+	docker tag mactat/framed mactat/framed:$(VERSION)
+	docker tag mactat/framed mactat/framed:alpine-$(ALPINE_VERSION)-$(VERSION)
+	docker push mactat/framed:$(VERSION)
+	docker push mactat/framed:alpine-$(ALPINE_VERSION)-$(VERSION)
+	docker push mactat/framed:latest
 
 .PHONY: build-in-docker
-build-in-docker:
+build-in-docker: clean version
 	docker run \
 		--rm \
 		-v $(ROOT):/app \
 		--env GOOS=$(OS) \
 		--env GOARCH=$(ARCH) \
-		golang:$(GO_VERSION)-alpine3.18 \
+		golang:$(GO_VERSION)-alpine$(ALPINE_VERSION) \
 		/bin/sh -c "cd /app && go build -o ./build/ ./framed.go"
 	sudo chown -R $(USER):$(USER) ./build
+	cd ./build && \
+	tar -zcvf \
+	  ./framed-$(OS)-$(ARCH)-$(VERSION).tar.gz \
+	  ./framed$(if $(filter $(OS),windows),.exe)
 
 .PHONY: release-lin
-release-lin: version
+release-lin:
 	$(MAKE) build-in-docker OS=linux ARCH=amd64
-	cd ./build && tar -zcvf ./framed-linux-$(VERSION).tar.gz ./framed
-	$(MAKE) clean
 
-# make release for windows
 .PHONY: release-win
-release-win: version
+release-win:
 	$(MAKE) build-in-docker OS=windows ARCH=amd64
-	cd ./build && tar -zcvf ./framed-windows-$(VERSION).tar.gz ./framed.exe
-	$(MAKE) clean
 
-# make release for mac
 .PHONY: release-mac
-release-mac: version
+release-mac:
 	$(MAKE) build-in-docker OS=darwin ARCH=amd64
-	cd ./build && tar -zcvf ./framed-macos-$(VERSION).tar.gz ./framed
-	$(MAKE) clean
 
 .PHONY: build
 build:
