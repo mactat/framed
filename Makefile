@@ -58,6 +58,11 @@ release-mac:
 build:
 	go build -o ./build/ ./framed.go
 
+.PHONY: test
+test:
+	docker build -f ./dockerfiles/dockerfile.test -t framed-test .
+	docker run --rm -it framed-test
+
 .PHONY: format
 format:
 	go fmt ./...
