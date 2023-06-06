@@ -28,12 +28,10 @@ structure:
           minCount: 1 # At least one file has to be there
           allowChildren: false # Allow subdirectories creation, default true
           allowedPatterns:
-              - ".dockerfile"
+              - "dockerfile"
         - name: docs
           maxCount: 10 # No more than 10 files per dir
           allowedPatterns:
               - ".md"
               - ".txt"
-          dirs:
-              - name: design
         - name: examples
