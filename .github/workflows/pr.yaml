@@ -10,4 +10,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: "Framed verify"
-        uses: 'mactat/framed@latest'
+        uses: 'mactat/framed@v0.0.7'
