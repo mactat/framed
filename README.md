@@ -196,6 +196,7 @@ framed import --example <example-name>
 Currently available examples:
 
 - python
+- golang
 
 See [examples](./examples) for more details.
 
