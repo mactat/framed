@@ -17,13 +17,16 @@ structure:
               - ".go"
           forbiddenPatterns:
               - "_test.go" # Disallow tests in /src
-        - name: pipelines
-          maxCount: 2
-          allowedPatterns:
-              - ".yml"
-              - ".yaml" # only yaml files allowed
-          files:
-              - pr.yaml
+        - name: .github
+          dirs:
+              - name: workflows
+                maxCount: 4
+                allowedPatterns:
+                    - ".yml"
+                    - ".yaml" # only yaml files allowed
+                files:
+                    - pr.yaml
+                    - release.yaml
         - name: dockerfiles
           minCount: 1 # At least one file has to be there
           allowChildren: false # Allow subdirectories creation, default true
