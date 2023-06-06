@@ -19,5 +19,7 @@ runs:
         mv framed /usr/local/bin
         chmod +x /usr/local/bin/framed
       shell: bash
-    - run: framed --template ${{ inputs.template }}
+    - run: framed visualize --template ${{ inputs.template }}
+      shell: bash
+    - run: framed verify --template ${{ inputs.template }}
       shell: bash

@@ -5,10 +5,8 @@ on:
   workflow_dispatch: {}
 jobs:
   pr:
-    name: "Pull Request"
+    name: "Pull Request Checks"
     runs-on: "ubuntu-latest"
-    permissions:
-      contents: write
     steps:
       - uses: actions/checkout@v2
       - name: "Framed"
