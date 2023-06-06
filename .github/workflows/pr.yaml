@@ -8,7 +8,7 @@ jobs:
     name: "Pull Request Checks"
     runs-on: "ubuntu-latest"
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: "Framed verify"
         uses: './.github/workflows/framed-action'
         with:
