@@ -13,8 +13,11 @@ runs:
   using: "composite"
   steps:
     - uses: actions/checkout@v3
-    - bash: |
+    - run: |
         wget https://github.com/mactat/framed/releases/download/${{ inputs.version }}/framed-linux-amd64-${{ inputs.version }}.tar.gz
         tar -xvzf framed-linux-amd64-${{ inputs.version }}.tar.gz
         mv framed /usr/local/bin
+        chmod +x /usr/local/bin/framed
+      shell: bash
     - run: framed --template ${{ inputs.template }}
+      shell: bash
