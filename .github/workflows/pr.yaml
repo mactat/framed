@@ -10,7 +10,4 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: "Framed verify"
-        uses: './.github/workflows/framed-action'
-        with:
-          template: './framed.yaml'
-          version: 'v0.0.7'
+        uses: 'mactator/framed@latest'
