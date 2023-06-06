@@ -1,0 +1,18 @@
+name: pr
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  workflow_dispatch: {}
+jobs:
+  pr:
+    name: "Pull Request"
+    runs-on: "ubuntu-latest"
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Framed"
+        uses: './.github/workflows/framed-action'
+        with:
+          template: './framed.yaml'
+          version: 'v0.0.7'
