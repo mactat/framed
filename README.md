@@ -1,6 +1,6 @@
 [![onTag](https://github.com/mactat/framed/actions/workflows/release.yaml/badge.svg)](https://github.com/mactat/framed/actions/workflows/release.yaml) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/mactat/framed) ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/mactat/framed) ![Docker Pulls](https://img.shields.io/docker/pulls/mactat/framed) ![Docker Image Version (latest by date)](https://img.shields.io/docker/v/mactat/framed?label=docker-version)  ![GitHub](https://img.shields.io/github/license/mactat/framed) ![GitHub Repo stars](https://img.shields.io/github/stars/mactat/framed?style=social)
 
-<img src="./docs/static/logo.png" style="object-fit: cover; width: 100%;">
+<img src="./docs/static/logo-wide.png" style="object-fit: cover; width: 100%;">
 
 # Framed - Files and Directories Reusability, Architecture, and Management
 
