@@ -1,0 +1,12 @@
+# FRAMED Configuration
+name: example
+
+structure:
+  name: root
+  files:
+    - test1.md
+  dirs:
+    - name: test2
+    - name: test3
+      files:
+        - test4.md

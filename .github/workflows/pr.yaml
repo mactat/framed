@@ -11,3 +11,6 @@ jobs:
       - uses: actions/checkout@v3
       - name: "Framed verify"
         uses: 'mactat/framed-action@v0.0.7'
+      - name: "Functional tests"
+        run: make test BUILD=true
+        shell: bash

@@ -49,7 +49,7 @@ func readConfig(path string) (config, []SingleDir) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		// add emoji
-		print("☠️  Can't read file ==>", path)
+		print("☠️ Can not read file ==>", path)
 		os.Exit(1)
 	}
 	print("✅ Loaded template from  ==>", path)
@@ -59,10 +59,16 @@ func readConfig(path string) (config, []SingleDir) {
 	// Unmarshal the YAML string into the data map
 	err = yaml.Unmarshal([]byte(yamlFile), &curConfig)
 	if err != nil {
-		print("☠️  Can't decode file ==>", path)
+		print("☠️ Can not decode file ==>", path)
 		os.Exit(1)
 	}
-	print("✅ Read structure for ==>", curConfig.Name)
+
+	if curConfig.Structure == nil {
+		print("☠️ Can not find correct structure in ==>", path)
+		os.Exit(1)
+	} else {
+		print("✅ Read structure for ==>", curConfig.Name)
+	}
 
 	dirList := []SingleDir{}
 	traverseStructure(curConfig.Structure, ".", &dirList)
@@ -70,7 +76,11 @@ func readConfig(path string) (config, []SingleDir) {
 }
 
 func traverseStructure(dir *SingleDir, path string, dirsList *[]SingleDir) {
-	// Chanage path
+	// Change path
+	if dir == nil {
+		print("☠️  Can't traverse nil dir ==>", path)
+		os.Exit(1)
+	}
 	dir.Path = path
 
 	// add current dir to dirsList

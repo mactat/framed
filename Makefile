@@ -58,6 +58,14 @@ release-mac:
 build:
 	go build -o ./build/ ./framed.go
 
+.PHONY: test
+test:
+	@if [ "$(BUILD)" = "true" ]; then\
+        $(MAKE) build-docker;\
+    fi
+	docker build -f ./dockerfiles/test.dockerfile -t framed-test .
+	docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats /test/"
+
 .PHONY: format
 format:
 	go fmt ./...
