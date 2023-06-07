@@ -64,7 +64,7 @@ test:
         $(MAKE) build-docker;\
     fi
 	docker build -f ./dockerfiles/test.dockerfile -t framed-test .
-	docker run --rm -it framed-test /bin/sh -c "/test/bats/bin/bats /test/"
+	docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats /test/"
 
 .PHONY: format
 format:
