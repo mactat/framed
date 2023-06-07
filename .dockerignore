@@ -4,3 +4,4 @@ dockerfiles/
 docs/
 build/
 LICENSE
+Makefile

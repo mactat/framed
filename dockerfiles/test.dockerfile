@@ -1,18 +1,16 @@
-ARG GO_VERSION=1.20.4
-ARG ALPINE_VERSION=3.18
+FROM mactat/framed:latest as builder
 
-FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} as builder
+FROM alpine:latest as tester
 
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN go build -o framed ./framed.go
+RUN apk add --no-cache git bash sudo
 
-FROM bats/bats:latest as tester
+# clone bats
+RUN git clone https://github.com/bats-core/bats-core.git /test/bats
+RUN git clone https://github.com/bats-core/bats-support.git /test/test_helper/bats-support
+RUN git clone https://github.com/bats-core/bats-assert.git /test/test_helper/bats-assert
+RUN git clone https://github.com/bats-core/bats-file.git /test/test_helper/bats-file
 
-WORKDIR /framed
-COPY --from=builder /app/framed /bin/framed
-COPY tests/ /tests
+COPY --from=builder /bin/framed /bin/framed
+COPY /test/test.bats /test/test.yaml /test/
 
-RUN LANG=go ./test/bats/bin/bats /tests/test.bats
+

@@ -60,8 +60,11 @@ build:
 
 .PHONY: test
 test:
-	docker build -f ./dockerfiles/dockerfile.test -t framed-test .
-	docker run --rm -it framed-test
+	@if [ "$(BUILD)" = "true" ]; then\
+        $(MAKE) build-docker;\
+    fi
+	docker build -f ./dockerfiles/test.dockerfile -t framed-test .
+	docker run --rm -it framed-test /bin/sh -c "/test/bats/bin/bats /test/"
 
 .PHONY: format
 format:
