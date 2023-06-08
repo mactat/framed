@@ -213,5 +213,5 @@ teardown() {
     assert_output --partial 'name: default'
     assert_output --partial 'test1'
     assert_output --partial 'test2.md'
-    assert_output --partial '.md'
+    assert_output --partial '.mdd'
 }
