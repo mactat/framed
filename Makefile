@@ -64,8 +64,11 @@ test:
         $(MAKE) build-docker;\
     fi
 	docker build -f ./dockerfiles/test.dockerfile -t framed-test .
-	docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats /test/"
-
+	@if [ "$(EXPORT)" = "true" ]; then\
+		docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats -F junit /test/" > ./build/test.xml;\
+	else\
+		docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats --pretty /test/";\
+	fi
 .PHONY: format
 format:
 	go fmt ./...
