@@ -12,5 +12,10 @@ jobs:
       - name: "Framed verify"
         uses: 'mactat/framed-action@v0.0.7'
       - name: "Functional tests"
-        run: make test BUILD=true
+        run: make test BUILD=true EXPORT=true
         shell: bash
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "results/test.xml"
+        if: always()
