@@ -65,8 +65,8 @@ test:
     fi
 	docker build -f ./dockerfiles/test.dockerfile -t framed-test .
 	@if [ "$(EXPORT)" = "true" ]; then\
-		mkdir -p ./build;\
-		docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats -F junit /test/" > ./build/test.xml;\
+		mkdir -p ./results;\
+		docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats -F junit /test/" > ./results/test.xml;\
 	else\
 		docker run --rm framed-test /bin/sh -c "/test/bats/bin/bats --pretty /test/";\
 	fi
