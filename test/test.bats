@@ -21,11 +21,16 @@ teardown() {
     sudo rm -R $TMP_DIR
 }
 
+### Basic
+
 @test "Run framed" {
     run framed --help
     assert_success
     assert_output --partial 'FRAMED (Files and Directories Reusability, Architecture, and Management)'
 }
+
+
+### Import
 
 @test "Import from valid example" {
 
@@ -73,14 +78,8 @@ teardown() {
     assert_output --partial 'name: python_example'
 }
 
-@test "Command when file not exist" {
-    for command in "${commands_with_template[@]}"
-    do
-        run framed $command
-        assert_failure
-        assert_output --partial '☠️ Can not read file'
-    done
-}
+
+### Visualize
 
 @test "Visualize show correct structure" {
     # setup
@@ -96,6 +95,9 @@ teardown() {
     assert_output --partial 'test3'
     assert_output --partial 'test4'
 }
+
+
+### Create
 
 @test "Create creates correct dirs" {
     # setup
@@ -142,7 +144,10 @@ teardown() {
     assert_output --partial '✅ Verified successfully!'
 }
 
-@test "Validate spot missing file" {
+
+### Validate
+
+@test "Verify should spot missing file" {
     # setup
     cp $DIR/test.yaml $TMP_DIR/framed.yaml
     assert_file_exists "$(pwd)/framed.yaml"
@@ -157,7 +162,7 @@ teardown() {
     assert_output --partial 'test1.md'
 }
 
-@test "Validate spot missing dir" {
+@test "Verify should spot missing dir" {
     # setup
     cp $DIR/test.yaml $TMP_DIR/framed.yaml
     assert_file_exists "$(pwd)/framed.yaml"
@@ -172,7 +177,7 @@ teardown() {
     assert_output --partial 'test2'
 }
 
-@test "Validate spot missing file and dir" {
+@test "Verify should spot missing file and dir" {
     # setup
     cp $DIR/test.yaml $TMP_DIR/framed.yaml
     assert_file_exists "$(pwd)/framed.yaml"
@@ -190,7 +195,111 @@ teardown() {
     assert_output --partial 'test2'
 }
 
-# Here should be tests for allowChildren, allowedPatterns, forbiddenPatterns, maxDepth, minCount, maxCount
+@test "Verify should spot wrong pattern if allowedPatterns is set" {
+    # setup
+    cp $DIR/test.yaml $TMP_DIR/framed.yaml
+    assert_file_exists "$(pwd)/framed.yaml"
+    run framed create --files
+    assert_success
+
+    yq -i '.structure.dirs[0].allowedPatterns[0] = "md"' "$(pwd)/framed.yaml"
+    touch "$(pwd)/test2/test3.txt"
+
+    # test
+    run framed verify
+    assert_failure
+    assert_output --partial '❌ Not all files match required pattern'
+    assert_output --partial 'test2'
+    assert_output --partial 'md'
+}
+
+@test "Verify should spot wrong pattern if forbiddenPatterns is set" {
+    # setup
+    cp $DIR/test.yaml $TMP_DIR/framed.yaml
+    assert_file_exists "$(pwd)/framed.yaml"
+    run framed create --files
+    assert_success
+
+    yq -i '.structure.dirs[0].forbiddenPatterns[0] = "md"' "$(pwd)/framed.yaml"
+    touch "$(pwd)/test2/test3.md"
+
+    # test
+    run framed verify
+    assert_failure
+    assert_output --partial '❌ Forbidden pattern (md) matched'
+    assert_output --partial 'test2'
+}
+
+@test "Verify should spot if there is less files than minCount" {
+    # setup
+    cp $DIR/test.yaml $TMP_DIR/framed.yaml
+    assert_file_exists "$(pwd)/framed.yaml"
+    run framed create --files
+    assert_success
+
+    yq -i '.structure.dirs[0].minCount = 2' "$(pwd)/framed.yaml"
+
+    # test
+    run framed verify
+    assert_failure
+    assert_output --partial '❌ Min count (2) not met'
+    assert_output --partial 'test2'
+}
+
+@test "Verify should spot if there is more files than maxCount" {
+    # setup
+    cp $DIR/test.yaml $TMP_DIR/framed.yaml
+    assert_file_exists "$(pwd)/framed.yaml"
+    run framed create --files
+    assert_success
+
+    yq -i '.structure.dirs[0].maxCount = 1' "$(pwd)/framed.yaml"
+    touch "$(pwd)/test2/test3.md"
+    touch "$(pwd)/test2/test4.md"
+
+    # test
+    run framed verify
+    assert_failure
+    assert_output --partial '❌ Max count (1) exceeded'
+    assert_output --partial 'test2'
+}
+
+@test "Verify should spot when maxDepth is exceeded" {
+    # setup
+    cp $DIR/test.yaml $TMP_DIR/framed.yaml
+    assert_file_exists "$(pwd)/framed.yaml"
+    run framed create --files
+    assert_success
+
+    yq -i '.structure.dirs[0].maxDepth = 1' "$(pwd)/framed.yaml"
+    mkdir "$(pwd)/test2/test3"
+
+    # test
+    run framed verify
+    assert_failure
+    assert_output --partial '❌ Max depth exceeded (1)'
+    assert_output --partial 'test2'
+}
+
+@test "Verify should spot when there are subdirs with children not allowed" {
+    # setup
+    cp $DIR/test.yaml $TMP_DIR/framed.yaml
+    assert_file_exists "$(pwd)/framed.yaml"
+    run framed create --files
+    assert_success
+
+    yq -i '.structure.dirs[0].allowChildren = false' "$(pwd)/framed.yaml"
+    mkdir "$(pwd)/test2/test3"
+
+    # test
+    run framed verify
+    assert_failure
+    assert_output --partial '❌ Children not allowed'
+    assert_output --partial 'test2'
+}
+
+
+### Capture
 
 @test "Capture should capture correct structure" {
     # setup
@@ -214,4 +323,16 @@ teardown() {
     assert_output --partial 'test1'
     assert_output --partial 'test2.md'
     assert_output --partial '.md'
+}
+
+
+### All
+
+@test "All commands fails when file not exist" {
+    for command in "${commands_with_template[@]}"
+    do
+        run framed $command
+        assert_failure
+        assert_output --partial '☠️ Can not read file'
+    done
 }
