@@ -4,6 +4,7 @@ GO_VERSION              := 1.20.4
 ALPINE_VERSION          := 3.18
 OS					  	:= linux
 ARCH                    := amd64
+BUILD                   := true
 
 .PHONY: version
 version:
