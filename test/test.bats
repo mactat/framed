@@ -301,7 +301,39 @@ teardown() {
 
 ### Capture
 
-@test "Capture should capture correct structure" {
+@test "Capture should fail if depth flag is not integer" {
+    # test
+    run framed capture --depth invalid_value
+    assert_failure
+    assert_output --partial '🚨 Invalid depth value'
+    assert_output --partial 'invalid_value'
+}
+
+@test "Capture should export correct name when name flag is set" {
+    # test
+    run framed capture --name test_name
+    assert_success
+    assert_output --partial '✅ Exported to file'
+
+    # verify
+    assert_file_exists "$(pwd)/framed.yaml"
+
+    run yq eval '.name' "$(pwd)/framed.yaml"
+    assert_success
+    assert_output 'test_name'
+}
+
+@test "Capture should save file to correct path when output flag is set" {
+    # test
+    run framed capture --output "$(pwd)/test.yaml"
+    assert_success
+    assert_output --partial '✅ Exported to file'
+
+    # verify
+    assert_file_exists "$(pwd)/test.yaml"
+}
+
+@test "Capture should capture correct structure without depth flag" {
     # setup
     mkdir "$(pwd)/test1"
     touch "$(pwd)/test1/test2.md"
@@ -317,12 +349,48 @@ teardown() {
 
     # verify
     assert_file_exists "$(pwd)/framed.yaml"
-    run cat "$(pwd)/framed.yaml"
+
+    run yq eval '.name' "$(pwd)/framed.yaml"
     assert_success
-    assert_output --partial 'name: default'
+    assert_output 'default'
+
+    run yq eval '.structure.dirs.[0].name' "$(pwd)/framed.yaml"
+    assert_success
+    assert_output 'test1'
+
+    run yq eval '.structure.dirs.[0].files.[0]' "$(pwd)/framed.yaml"
+    assert_success
+    assert_output 'test2.md'
+
+    run yq eval '.structure.dirs.[0].allowedPatterns.[0]' "$(pwd)/framed.yaml"
+    assert_success
+    assert_output '.md'
+}
+
+@test "Capture should capture correct depth when flag is provided" {
+    # setup
+    mkdir "$(pwd)/test1"
+    mkdir "$(pwd)/test1/test2"
+    mkdir "$(pwd)/test1/test2/test3"
+    touch "$(pwd)/test1/test2/test3/test4.md"
+    touch "$(pwd)/test6.md"
+
+    # test
+    run framed capture --depth 1
+    assert_success
+    assert_output --partial '📂 Directories:                      1'
+    assert_output --partial '📄 Files:                            1'
+    run yq eval '.structure.dirs' "$(pwd)/framed.yaml"
+    assert_success
     assert_output --partial 'test1'
-    assert_output --partial 'test2.md'
-    assert_output --partial '.md'
+    refute_output --partial 'test2'
+    refute_output --partial 'test3'
+    refute_output --partial 'test4.md'
+
+    run yq eval '.structure.files' "$(pwd)/framed.yaml"
+    assert_success
+    assert_output --partial 'test6.md'
+
 }
 
 

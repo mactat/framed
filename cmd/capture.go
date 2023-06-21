@@ -8,6 +8,9 @@ package cmd
 import (
 	"fmt"
 
+	"os"
+	"strconv"
+
 	"github.com/spf13/cobra"
 )
 
@@ -23,18 +26,24 @@ framed capture --output ./framed.yaml --name my-project
 	Run: func(cmd *cobra.Command, args []string) {
 		output := cmd.Flag("output").Value.String()
 		name := cmd.Flag("name").Value.String()
+		depthStr := cmd.Flag("depth").Value.String()
+		depth, err := strconv.Atoi(depthStr)
+		if err != nil {
+			print("🚨 Invalid depth value: ", depthStr)
+			os.Exit(1)
+		}
 		print("📝 Name:", name+"\n")
 
 		// capture subdirectories
-		subdirs := captureSubDirs(".")
+		subdirs := captureSubDirs(".", depth)
 		print("📂 Directories:", fmt.Sprintf("%v", len(subdirs)))
 
 		// capture files
-		files := captureAllFiles(".")
+		files := captureAllFiles(".", depth)
 		print("📄 Files:", fmt.Sprintf("%v", len(files)))
 
 		// capture patterns
-		patterns := captureRequiredPatterns(".")
+		patterns := captureRequiredPatterns(".", depth)
 		print("🔁 Patterns:", fmt.Sprintf("%v", len(patterns)))
 
 		// export config
@@ -50,4 +59,7 @@ func init() {
 	captureCmd.PersistentFlags().String("output", "./framed.yaml", "path to output file")
 
 	captureCmd.PersistentFlags().String("name", "default", "name of the project")
+
+	// Int flag - depth
+	captureCmd.PersistentFlags().String("depth", "-1", "depth of the directory tree to capture")
 }
