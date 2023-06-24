@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Maciej Tatarski maciektatarski@gmail.com
 */
 
 // Package cmd represents the command line interface of the application
@@ -7,6 +7,7 @@ package cmd
 
 import (
 	"fmt"
+	"framed/pkg/ext"
 	"os"
 	"strings"
 
@@ -25,13 +26,13 @@ framed verify --template ./framed.yaml
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
 		// read config
-		_, dirList := readConfig(path)
+		_, dirList := ext.ReadConfig(path)
 
 		allGood := true
 		// verify directories
 		for _, dir := range dirList {
-			if !dirExists(dir.Path) {
-				print("❌ Directory not found ==>", dir.Path)
+			if !ext.DirExists(dir.Path) {
+				ext.PrintOut("❌ Directory not found ==>", dir.Path)
 				allGood = false
 			}
 
@@ -41,27 +42,27 @@ framed verify --template ./framed.yaml
 			}
 
 			// verify minCount and maxCount
-			numFiles := countFiles(dir.Path)
+			numFiles := ext.CountFiles(dir.Path)
 			if numFiles < dir.MinCount {
-				print("❌ Min count ("+fmt.Sprint(dir.MinCount)+") not met ==>", dir.Path)
+				ext.PrintOut("❌ Min count ("+fmt.Sprint(dir.MinCount)+") not met ==>", dir.Path)
 				allGood = false
 			}
 			if numFiles > dir.MaxCount {
-				print("❌ Max count ("+fmt.Sprint(dir.MaxCount)+") exceeded ==>", dir.Path)
+				ext.PrintOut("❌ Max count ("+fmt.Sprint(dir.MaxCount)+") exceeded ==>", dir.Path)
 				allGood = false
 			}
 
 			// verify childrenAllowed
 			if !dir.AllowChildren {
-				if hasDirs(dir.Path) {
-					print("❌ Children not allowed ==>", dir.Path)
+				if ext.HasDirs(dir.Path) {
+					ext.PrintOut("❌ Children not allowed ==>", dir.Path)
 					allGood = false
 				}
 			}
 
 			// verify maxDepth
-			if checkDepth(dir.Path) > dir.MaxDepth {
-				print("❌ Max depth exceeded ("+fmt.Sprint(dir.MaxDepth)+") ==>", dir.Path)
+			if ext.CheckDepth(dir.Path) > dir.MaxDepth {
+				ext.PrintOut("❌ Max depth exceeded ("+fmt.Sprint(dir.MaxDepth)+") ==>", dir.Path)
 				allGood = false
 			}
 
@@ -84,33 +85,33 @@ framed verify --template ./framed.yaml
 	},
 }
 
-func verifyFiles(dir SingleDir, allGood *bool) {
+func verifyFiles(dir ext.SingleDir, allGood *bool) {
 	for _, file := range *dir.Files {
-		if !fileExists(dir.Path + "/" + file) {
-			print("❌ File not found      ==>", dir.Path+"/"+file)
+		if !ext.FileExists(dir.Path + "/" + file) {
+			ext.PrintOut("❌ File not found      ==>", dir.Path+"/"+file)
 			*allGood = false
 		}
 	}
 }
-func verifyForbiddenPatterns(dir SingleDir, allGood *bool) {
+func verifyForbiddenPatterns(dir ext.SingleDir, allGood *bool) {
 	for _, pattern := range *dir.ForbiddenPatterns {
-		matched := matchPatternInDir(dir.Path, pattern)
+		matched := ext.MatchPatternInDir(dir.Path, pattern)
 		for _, match := range matched {
-			print("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
+			ext.PrintOut("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
 			*allGood = false
 		}
 	}
 }
 
-func verifyAllowedPatterns(dir SingleDir, allGood *bool) {
+func verifyAllowedPatterns(dir ext.SingleDir, allGood *bool) {
 	matchedCount := 0
 	for _, pattern := range *dir.AllowedPatterns {
-		matched := matchPatternInDir(dir.Path, pattern)
+		matched := ext.MatchPatternInDir(dir.Path, pattern)
 		matchedCount += len(matched)
 	}
-	if matchedCount != countFiles(dir.Path) && len(*dir.AllowedPatterns) > 0 {
+	if matchedCount != ext.CountFiles(dir.Path) && len(*dir.AllowedPatterns) > 0 {
 		patternsString := strings.Join(*dir.AllowedPatterns, " ")
-		print("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
+		ext.PrintOut("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
 		*allGood = false
 	}
 }

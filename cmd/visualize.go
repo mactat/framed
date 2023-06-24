@@ -1,11 +1,13 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Maciej Tatarski maciektatarski@gmail.com
 */
 
 // Package cmd represents the command line interface of the application
 package cmd
 
 import (
+	"framed/pkg/ext"
+
 	"github.com/spf13/cobra"
 )
 
@@ -21,10 +23,10 @@ framed visualize --template ./framed.yaml`,
 		path := cmd.Flag("template").Value.String()
 
 		// read config
-		_, dirList := readConfig(path)
+		_, dirList := ext.ReadConfig(path)
 
 		// visualize template
-		visualizeTemplate(dirList)
+		ext.VisualizeTemplate(dirList)
 	},
 }
 

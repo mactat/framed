@@ -1,9 +1,4 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
-
-// Package cmd represents the command line interface of the application
-package cmd
+package ext
 
 import (
 	"io/ioutil"
@@ -45,29 +40,29 @@ type config struct {
 	Structure *SingleDir `yaml:"structure"`
 }
 
-func readConfig(path string) (config, []SingleDir) {
+func ReadConfig(path string) (config, []SingleDir) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		// add emoji
-		print("☠️ Can not read file ==>", path)
+		PrintOut("☠️ Can not read file ==>", path)
 		os.Exit(1)
 	}
-	print("✅ Loaded template from  ==>", path)
+	PrintOut("✅ Loaded template from  ==>", path)
 	// Map to store the parsed YAML data
 	var curConfig config
 
 	// Unmarshal the YAML string into the data map
 	err = yaml.Unmarshal([]byte(yamlFile), &curConfig)
 	if err != nil {
-		print("☠️ Can not decode file ==>", path)
+		PrintOut("☠️ Can not decode file ==>", path)
 		os.Exit(1)
 	}
 
 	if curConfig.Structure == nil {
-		print("☠️ Can not find correct structure in ==>", path)
+		PrintOut("☠️ Can not find correct structure in ==>", path)
 		os.Exit(1)
 	} else {
-		print("✅ Read structure for ==>", curConfig.Name)
+		PrintOut("✅ Read structure for ==>", curConfig.Name)
 	}
 
 	dirList := []SingleDir{}
@@ -78,7 +73,7 @@ func readConfig(path string) (config, []SingleDir) {
 func traverseStructure(dir *SingleDir, path string, dirsList *[]SingleDir) {
 	// Change path
 	if dir == nil {
-		print("☠️  Can't traverse nil dir ==>", path)
+		PrintOut("☠️  Can't traverse nil dir ==>", path)
 		os.Exit(1)
 	}
 	dir.Path = path

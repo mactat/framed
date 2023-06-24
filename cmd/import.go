@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Maciej Tatarski maciektatarski@gmail.com
 */
 
 // Package cmd represents the command line interface of the application
@@ -7,6 +7,7 @@ package cmd
 
 import (
 	"fmt"
+	"framed/pkg/ext"
 	"io"
 	"net/http"
 	"os"
@@ -45,11 +46,11 @@ framed import --example python --output ./python.yaml
 			}
 		}
 
-		print("✅ Saved to ==>", output)
+		ext.PrintOut("✅ Saved to ==>", output)
 
 		// try to load
-		configTree, _ := readConfig(output)
-		print("✅ Imported successfully ==>", configTree.Name)
+		configTree, _ := ext.ReadConfig(output)
+		ext.PrintOut("✅ Imported successfully ==>", configTree.Name)
 
 	},
 }

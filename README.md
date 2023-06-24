@@ -254,7 +254,8 @@ You can use framed as a github action to verify your project structure. Minimal 
         template: https://yourfile.com/framed.yaml # Share templates between projects
   ```
 
-- [ ] Add some unit tests
+- [x] Add some tests
 - [ ] Add contributing guidelines
 - [ ] Add more examples
 - [x] Create a github action for running tests
+- [ ] Move remaining business logic to a separate package

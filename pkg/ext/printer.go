@@ -1,9 +1,4 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
-
-// Package cmd represents the command line interface of the application
-package cmd
+package ext
 
 import (
 	"fmt"
@@ -13,12 +8,12 @@ import (
 	"github.com/TwiN/go-color"
 )
 
-func print(prompt string, text string) {
+func PrintOut(prompt string, text string) {
 	fmt.Printf("%-35s %-35s\n", prompt, text)
 }
 
 // This is ugly but it works, it needs to be refactored. It also has some bugs in case of out of order directories.
-func visualizeTemplate(template []SingleDir) {
+func VisualizeTemplate(template []SingleDir) {
 	for dirNum, dir := range template {
 		connectorDir := "├──"
 		initString := ""

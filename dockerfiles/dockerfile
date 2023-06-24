@@ -4,11 +4,12 @@ ARG ALPINE_VERSION=3.18
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} as builder
 
 WORKDIR /app
-COPY go.mod go.sum ./
+COPY go.mod go.sum /app/
 RUN go mod download
-COPY framed.go ./
-COPY cmd ./cmd
-RUN go build -o framed ./framed.go
+COPY framed.go /app/
+COPY cmd /app/cmd
+COPY pkg /app/pkg
+RUN go build -o framed /app/framed.go
 
 FROM alpine:${ALPINE_VERSION} as release
 

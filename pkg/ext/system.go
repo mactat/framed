@@ -1,9 +1,4 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
-
-// Package cmd represents the command line interface of the application
-package cmd
+package ext
 
 import (
 	"errors"
@@ -15,7 +10,7 @@ import (
 	"strings"
 )
 
-func createDir(path string) {
+func CreateDir(path string) {
 	// Create directory
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		err := os.Mkdir(path, os.ModePerm)
@@ -27,7 +22,7 @@ func createDir(path string) {
 
 }
 
-func createFile(path string, name string) {
+func CreateFile(path string, name string) {
 	// Check if file exists
 	if _, err := os.Stat(path + "/" + name); errors.Is(err, os.ErrNotExist) {
 		// Create file
@@ -41,7 +36,7 @@ func createFile(path string, name string) {
 }
 
 // Check if directory exists on given path and is type dir
-func dirExists(path string) bool {
+func DirExists(path string) bool {
 	if path == "." {
 		return true
 	}
@@ -53,7 +48,7 @@ func dirExists(path string) bool {
 }
 
 // Check if file exists on given path and is type file
-func fileExists(path string) bool {
+func FileExists(path string) bool {
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
 		return false
@@ -62,7 +57,7 @@ func fileExists(path string) bool {
 }
 
 // Count files in given directory
-func countFiles(path string) int {
+func CountFiles(path string) int {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		log.Fatal(err)
@@ -76,7 +71,7 @@ func countFiles(path string) int {
 	return filesCount
 }
 
-func hasDirs(path string) bool {
+func HasDirs(path string) bool {
 	files, err := os.ReadDir(path)
 	if err != nil {
 		log.Fatal(err)
@@ -90,7 +85,7 @@ func hasDirs(path string) bool {
 }
 
 // Check depth of folder tree, exclude .git folder
-func checkDepth(path string) int {
+func CheckDepth(path string) int {
 	maxDepth := 0
 	var depth int
 	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
@@ -110,7 +105,7 @@ func checkDepth(path string) int {
 	return maxDepth
 }
 
-func matchPatternInDir(path string, pattern string) []string {
+func MatchPatternInDir(path string, pattern string) []string {
 	if pattern == "" {
 		pattern = ".*"
 	}
@@ -135,7 +130,7 @@ func matchPatternInDir(path string, pattern string) []string {
 }
 
 // Capture all subdirectories in given directory
-func captureSubDirs(path string, depth int) []string {
+func CaptureSubDirs(path string, depth int) []string {
 	var dirs []string
 	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && info.Name() == ".git" {
@@ -151,7 +146,7 @@ func captureSubDirs(path string, depth int) []string {
 }
 
 // Capture all files in given directory
-func captureAllFiles(path string, depth int) []string {
+func CaptureAllFiles(path string, depth int) []string {
 	var files []string
 	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && info.Name() == ".git" {
@@ -168,7 +163,7 @@ func captureAllFiles(path string, depth int) []string {
 
 // Capture rules for files with same extension in given directory. If all files in subdirectory have the same extension, save the extension to map with directory path as key.
 // It should return map path -> extension
-func captureRequiredPatterns(path string, depth int) map[string]string {
+func CaptureRequiredPatterns(path string, depth int) map[string]string {
 	var rules = make(map[string]string)
 	var dirs []string
 	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
