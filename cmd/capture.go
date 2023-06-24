@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Maciej Tatarski maciektatarski@gmail.com
 */
 
 // Package cmd represents the command line interface of the application
@@ -8,6 +8,7 @@ package cmd
 import (
 	"fmt"
 
+	"framed/pkg/ext"
 	"os"
 	"strconv"
 
@@ -29,26 +30,26 @@ framed capture --output ./framed.yaml --name my-project
 		depthStr := cmd.Flag("depth").Value.String()
 		depth, err := strconv.Atoi(depthStr)
 		if err != nil {
-			print("🚨 Invalid depth value: ", depthStr)
+			ext.PrintOut("🚨 Invalid depth value: ", depthStr)
 			os.Exit(1)
 		}
-		print("📝 Name:", name+"\n")
+		ext.PrintOut("📝 Name:", name+"\n")
 
 		// capture subdirectories
-		subdirs := captureSubDirs(".", depth)
-		print("📂 Directories:", fmt.Sprintf("%v", len(subdirs)))
+		subdirs := ext.CaptureSubDirs(".", depth)
+		ext.PrintOut("📂 Directories:", fmt.Sprintf("%v", len(subdirs)))
 
 		// capture files
-		files := captureAllFiles(".", depth)
-		print("📄 Files:", fmt.Sprintf("%v", len(files)))
+		files := ext.CaptureAllFiles(".", depth)
+		ext.PrintOut("📄 Files:", fmt.Sprintf("%v", len(files)))
 
 		// capture patterns
-		patterns := captureRequiredPatterns(".", depth)
-		print("🔁 Patterns:", fmt.Sprintf("%v", len(patterns)))
+		patterns := ext.CaptureRequiredPatterns(".", depth)
+		ext.PrintOut("🔁 Patterns:", fmt.Sprintf("%v", len(patterns)))
 
 		// export config
-		exportConfig(name, output, subdirs, files, patterns)
-		print("\n✅ Exported to file: ", output)
+		ext.ExportConfig(name, output, subdirs, files, patterns)
+		ext.PrintOut("\n✅ Exported to file: ", output)
 	},
 }
 

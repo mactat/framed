@@ -1,9 +1,4 @@
-/*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
-*/
-
-// Package cmd represents the command line interface of the application
-package cmd
+package ext
 
 import (
 	"fmt"
@@ -17,7 +12,7 @@ import (
 type SingleDirOut struct {
 	Name              string          `yaml:"name"`
 	Path              string          `yaml:"-"`
-	Files             *[]string       `yaml:"files",omitempty`
+	Files             *[]string       `yaml:"files,omitempty"`
 	Dirs              *[]SingleDirOut `yaml:"dirs,omitempty"`
 	AllowedPatterns   *[]string       `yaml:"allowedPatterns,omitempty"`
 	ForbiddenPatterns *[]string       `yaml:"forbiddenPatterns,omitempty"`
@@ -32,7 +27,7 @@ type configOut struct {
 	Structure *SingleDirOut `yaml:"structure"`
 }
 
-func exportConfig(name string, path string, subdirs []string, files []string, patterns map[string]string) {
+func ExportConfig(name string, path string, subdirs []string, files []string, patterns map[string]string) {
 	// create config, files and dirs are empty
 	config := configOut{
 		Name: name,

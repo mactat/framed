@@ -1,5 +1,5 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Maciej Tatarski maciektatarski@gmail.com
 */
 
 // Package cmd represents the command line interface of the application

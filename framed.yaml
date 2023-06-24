@@ -16,7 +16,12 @@ structure:
           allowedPatterns:
               - ".go"
           forbiddenPatterns:
-              - "_test.go" # Disallow tests in /src
+              - "_test.go" # Disallow tests in /cmd
+        - name: pkg
+          dirs:
+              - name: ext
+                allowedPatterns:
+                    - ".go"
         - name: .github
           dirs:
               - name: workflows

@@ -1,11 +1,13 @@
 /*
-Copyright © 2023 NAME HERE <EMAIL ADDRESS>
+Copyright © 2023 Maciej Tatarski maciektatarski@gmail.com
 */
 
 // Package cmd represents the command line interface of the application
 package cmd
 
 import (
+	"framed/pkg/ext"
+
 	"github.com/spf13/cobra"
 )
 
@@ -23,11 +25,11 @@ framed create --template ./framed.yaml --files true
 		createFiles := cmd.Flag("files").Value.String() == "true"
 
 		// read config
-		_, dirList := readConfig(path)
+		_, dirList := ext.ReadConfig(path)
 
 		// create directories
 		for _, dir := range dirList {
-			createDir(dir.Path)
+			ext.CreateDir(dir.Path)
 		}
 
 		// create files
@@ -37,7 +39,7 @@ framed create --template ./framed.yaml --files true
 					continue
 				}
 				for _, file := range *dir.Files {
-					createFile(dir.Path, file)
+					ext.CreateFile(dir.Path, file)
 				}
 			}
 		}
