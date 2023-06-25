@@ -44,7 +44,7 @@ func ReadConfig(path string) (config, []SingleDir) {
 	yamlFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		// add emoji
-		PrintOut("☠️ Can not read file ==>", path)
+		PrintOut("☠️  Can not read file ==>", path)
 		os.Exit(1)
 	}
 	PrintOut("✅ Loaded template from  ==>", path)

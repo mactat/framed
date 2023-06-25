@@ -40,9 +40,7 @@ framed create --template ./framed.yaml --files true
 func init() {
 	rootCmd.AddCommand(createCmd)
 
-	// Here you will define your flags and configuration settings.
-
 	createCmd.PersistentFlags().String("template", "./framed.yaml", "path to template file default")
-	// add flag to create required files
+
 	createCmd.PersistentFlags().Bool("files", false, "create required files")
 }
