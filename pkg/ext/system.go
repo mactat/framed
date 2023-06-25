@@ -22,6 +22,12 @@ func CreateDir(path string) {
 
 }
 
+func CreateAllDirs(dirList []SingleDir) {
+	for _, dir := range dirList {
+		CreateDir(dir.Path)
+	}
+}
+
 func CreateFile(path string, name string) {
 	// Check if file exists
 	if _, err := os.Stat(path + "/" + name); errors.Is(err, os.ErrNotExist) {
@@ -32,6 +38,17 @@ func CreateFile(path string, name string) {
 			log.Println(err)
 		}
 		defer file.Close()
+	}
+}
+
+func CreateAllFiles(dirList []SingleDir) {
+	for _, dir := range dirList {
+		if dir.Files == nil {
+			continue
+		}
+		for _, file := range *dir.Files {
+			CreateFile(dir.Path, file)
+		}
 	}
 }
 

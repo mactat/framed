@@ -41,12 +41,14 @@ framed verify --template ./framed.yaml
 				verifyFiles(dir, &allGood)
 			}
 
-			// verify minCount and maxCount
+			// verify minCount
 			numFiles := ext.CountFiles(dir.Path)
 			if numFiles < dir.MinCount {
 				ext.PrintOut("❌ Min count ("+fmt.Sprint(dir.MinCount)+") not met ==>", dir.Path)
 				allGood = false
 			}
+
+			// verify maxCount
 			if numFiles > dir.MaxCount {
 				ext.PrintOut("❌ Max count ("+fmt.Sprint(dir.MaxCount)+") exceeded ==>", dir.Path)
 				allGood = false

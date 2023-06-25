@@ -28,20 +28,11 @@ framed create --template ./framed.yaml --files true
 		_, dirList := ext.ReadConfig(path)
 
 		// create directories
-		for _, dir := range dirList {
-			ext.CreateDir(dir.Path)
-		}
+		ext.CreateAllDirs(dirList)
 
 		// create files
 		if createFiles {
-			for _, dir := range dirList {
-				if dir.Files == nil {
-					continue
-				}
-				for _, file := range *dir.Files {
-					ext.CreateFile(dir.Path, file)
-				}
-			}
+			ext.CreateAllFiles(dirList)
 		}
 	},
 }

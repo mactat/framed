@@ -32,8 +32,5 @@ framed visualize --template ./framed.yaml`,
 
 func init() {
 	rootCmd.AddCommand(visualizeCmd)
-
-	// Here you will define your flags and configuration settings.
-
 	visualizeCmd.PersistentFlags().String("template", "./framed.yaml", "Path to template file default is ./framed.yaml")
 }
