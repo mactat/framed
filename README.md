@@ -100,36 +100,75 @@ The allowChildren property, when set to true, permits the presence of additional
 
 ## Installation
 
-To install Framed, follow these steps:
+### Darwin (macOS) Installation
 
-1. Download the latest release from the  [Framed repository](https://github.com/mactat/framed/releases)
+1. Download the `framed-darwin-amd64-<version>.tar.gz` package from release page.
 
-for linux:
+2. Extract the package by double-clicking on the downloaded file or using a tool like `tar` in your terminal:
+   ```shell
+   tar -xzf framed-darwin-amd64-<version>.tar.gz
+   ```
 
-  ```bash
-  wget https://github.com/mactat/framed/releases/download/<version>/framed-linux-<version>.tar.gz
-  ```
+3. This will extract the `framed` binary.
 
-2. Extract the downloaded archive to a directory of your choice.
+4. Open a terminal and navigate to the extracted directory:
+   ```shell
+   cd framed-darwin-amd64-<version>
+   ```
 
-for linux:
+5. Make the binary executable by running the following command:
+   ```shell
+   chmod +x framed
+   ```
 
-  ```bash
-  tar -xvf framed-linux-<version>.tar.gz
-  ```
+6. Move the `framed` binary to a directory in your system's `PATH` so that it can be accessed from anywhere. For example:
+   ```shell
+   sudo mv framed /usr/local/bin/
+   ```
 
-3. Add the Framed binary to your system's PATH environment variable.
+7. You can now use the `framed` command to execute the application.
 
-for linux:
+### Linux Installation
 
-  ```bash
-  export PATH=$PATH:<path-to-framed-binary>
-  ```
+1. Download the `framed-linux-amd64-<version>.tar.gz` package from release page.
 
-4. Verify the installation by running the following command in your terminal:
-framed --version
+2. Extract the package using the following command in your terminal:
+   ```shell
+   tar -xzf framed-linux-amd64-<version>.tar.gz
+   ```
 
-For detailed installation instructions and alternative installation methods, refer to the [documentation](link-to-installation-guide).
+3. This will extract the `framed` binary.
+
+4. Open a terminal and navigate to the extracted directory:
+   ```shell
+   cd framed-linux-amd64-<version>
+   ```
+
+5. Make the binary executable by running the following command:
+   ```shell
+   chmod +x framed
+   ```
+
+6. Move the `framed` binary to a directory in your system's `PATH` so that it can be accessed from anywhere. For example:
+   ```shell
+   sudo mv framed /usr/local/bin/
+   ```
+
+7. You can now use the `framed` command to execute the application.
+
+### Windows Installation
+
+1. Download the `framed-windows-amd64-<version>.tar.gz` package from release page.
+
+2. Extract the package using a file extraction tool like 7-Zip or WinRAR.
+
+3. This will extract the `framed.exe` binary.
+
+4. Move the `framed.exe` binary to a directory that is included in your system's `PATH`, such as `C:\Windows` or `C:\Windows\System32`.
+
+5. You can now use the `framed` command to execute the application from the Command Prompt or PowerShell.
+
+**Please note that the exact steps may vary depending on your system configuration.**
 
 ## Usage
 
@@ -235,7 +274,7 @@ You can use framed as a github action to verify your project structure. Minimal 
           uses: mactat/framed@0.0.7
           with:
             template: './framed.yaml' # Optional, default is framed.yaml
-            version: 'v0.0.7'         # Optional, default is v0.0.7
+            version: 'v0.0.8'         # Optional, default is v0.0.8
   ```
 
 ## TODO
