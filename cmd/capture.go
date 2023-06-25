@@ -56,11 +56,9 @@ framed capture --output ./framed.yaml --name my-project
 func init() {
 	rootCmd.AddCommand(captureCmd)
 
-	// Here you will define your flags and configuration settings.
 	captureCmd.PersistentFlags().String("output", "./framed.yaml", "path to output file")
 
 	captureCmd.PersistentFlags().String("name", "default", "name of the project")
 
-	// Int flag - depth
 	captureCmd.PersistentFlags().String("depth", "-1", "depth of the directory tree to capture")
 }

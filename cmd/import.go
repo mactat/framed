@@ -6,8 +6,8 @@ Copyright © 2023 Maciej Tatarski maciektatarski@gmail.com
 package cmd
 
 import (
-	"fmt"
 	"framed/pkg/ext"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -30,16 +30,16 @@ framed import --example python --output ./python.yaml
 		if url != "" {
 			err := ext.ImportFromUrl(output, url)
 			if err != nil {
-				fmt.Println("Error importing from url: ", err)
-				return
+				ext.PrintOut("☠️ Failed to import from url ==>", url)
+				os.Exit(1)
 			}
 		}
 
 		if example != "" {
 			err := ext.ImportFromUrl(output, ext.ExampleToUrl(example))
 			if err != nil {
-				fmt.Println("Error importing from example: ", err)
-				return
+				ext.PrintOut("☠️ Failed to import from example ==>", example)
+				os.Exit(1)
 			}
 		}
 

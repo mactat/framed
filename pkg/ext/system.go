@@ -217,3 +217,34 @@ func CaptureRequiredPatterns(path string, depth int) map[string]string {
 	}
 	return rules
 }
+
+func VerifyFiles(dir SingleDir, allGood *bool) {
+	for _, file := range *dir.Files {
+		if !FileExists(dir.Path + "/" + file) {
+			PrintOut("❌ File not found      ==>", dir.Path+"/"+file)
+			*allGood = false
+		}
+	}
+}
+func VerifyForbiddenPatterns(dir SingleDir, allGood *bool) {
+	for _, pattern := range *dir.ForbiddenPatterns {
+		matched := MatchPatternInDir(dir.Path, pattern)
+		for _, match := range matched {
+			PrintOut("❌ Forbidden pattern ("+pattern+") matched under ==>", dir.Path+"/"+match)
+			*allGood = false
+		}
+	}
+}
+
+func VerifyAllowedPatterns(dir SingleDir, allGood *bool) {
+	matchedCount := 0
+	for _, pattern := range *dir.AllowedPatterns {
+		matched := MatchPatternInDir(dir.Path, pattern)
+		matchedCount += len(matched)
+	}
+	if matchedCount != CountFiles(dir.Path) && len(*dir.AllowedPatterns) > 0 {
+		patternsString := strings.Join(*dir.AllowedPatterns, " ")
+		PrintOut("❌ Not all files match required pattern ("+patternsString+") under ==>", dir.Path)
+		*allGood = false
+	}
+}
