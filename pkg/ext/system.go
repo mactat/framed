@@ -149,7 +149,7 @@ func MatchPatternInDir(path string, pattern string) []string {
 // Capture all subdirectories in given directory
 func CaptureSubDirs(path string, depth int) []string {
 	var dirs []string
-	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && info.Name() == ".git" {
 			return filepath.SkipDir
 		} else if info.IsDir() && depth > 0 && strings.Count(path, string(os.PathSeparator)) >= depth {
@@ -159,13 +159,17 @@ func CaptureSubDirs(path string, depth int) []string {
 		}
 		return nil
 	})
+	if err != nil {
+		fmt.Printf("Cannot traverse dirs!")
+		os.Exit(1)
+	}
 	return dirs
 }
 
 // Capture all files in given directory
 func CaptureAllFiles(path string, depth int) []string {
 	var files []string
-	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && info.Name() == ".git" {
 			return filepath.SkipDir
 		} else if !info.IsDir() && depth > 0 && strings.Count(path, string(os.PathSeparator)) >= depth {
@@ -175,6 +179,10 @@ func CaptureAllFiles(path string, depth int) []string {
 		}
 		return nil
 	})
+	if err != nil {
+		fmt.Printf("Cannot traverse dirs!")
+		os.Exit(1)
+	}
 	return files
 }
 
@@ -183,7 +191,7 @@ func CaptureAllFiles(path string, depth int) []string {
 func CaptureRequiredPatterns(path string, depth int) map[string]string {
 	var rules = make(map[string]string)
 	var dirs []string
-	filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
 		if info.IsDir() && info.Name() == ".git" {
 			return filepath.SkipDir
 		} else if info.IsDir() && depth > 0 && strings.Count(path, string(os.PathSeparator)) >= depth {
@@ -193,6 +201,10 @@ func CaptureRequiredPatterns(path string, depth int) map[string]string {
 		}
 		return nil
 	})
+	if err != nil {
+		fmt.Printf("Cannot traverse dirs!")
+		os.Exit(1)
+	}
 	// Check files in dir, if all extensions are the same, save extension to map with dir path as key
 	for _, dir := range dirs {
 		files, err := os.ReadDir(dir)

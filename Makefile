@@ -75,6 +75,10 @@ test:
 format:
 	go fmt ./...
 
+.PHONY: lint
+lint:
+	docker run -t --rm -v $(PWD):/app -w /app golangci/golangci-lint:v1.53.3 golangci-lint run -v
+
 .PHONY: clean
 clean:
 	rm -f ./build/framed
