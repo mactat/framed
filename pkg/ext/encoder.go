@@ -2,7 +2,7 @@ package ext
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"strings"
 
 	"gopkg.in/yaml.v3"
@@ -53,7 +53,7 @@ func ExportConfig(name string, path string, subdirs []string, files []string, pa
 	}
 
 	// Save to file
-	err = ioutil.WriteFile(path, yamlFile, 0644)
+	err = os.WriteFile(path, yamlFile, 0644)
 	if err != nil {
 		fmt.Printf("Error while writing file. %v", err)
 	}

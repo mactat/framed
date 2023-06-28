@@ -19,3 +19,7 @@ jobs:
         with:
           paths: "results/test.xml"
         if: always()
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          version: v1.53

@@ -1,7 +1,7 @@
 package ext
 
 import (
-	"io/ioutil"
+	"fmt"
 	"os"
 
 	"github.com/creasty/defaults"
@@ -25,7 +25,11 @@ type SingleDir struct {
 // UnmarshalYAML implements yaml.Unmarshaler interface
 // Meant for initializing default values
 func (s *SingleDir) UnmarshalYAML(unmarshal func(interface{}) error) error {
-	defaults.Set(s)
+	err := defaults.Set(s)
+	if err != nil {
+		fmt.Println("Cannot set defaults!")
+		os.Exit(1)
+	}
 
 	type plain SingleDir
 	if err := unmarshal((*plain)(s)); err != nil {
@@ -41,7 +45,7 @@ type config struct {
 }
 
 func ReadConfig(path string) (config, []SingleDir) {
-	yamlFile, err := ioutil.ReadFile(path)
+	yamlFile, err := os.ReadFile(path)
 	if err != nil {
 		// add emoji
 		PrintOut("☠️ Can not read file ==>", path)
