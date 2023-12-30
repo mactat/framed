@@ -1,0 +1,38 @@
+builds:
+  - binary: framed
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -mod=vendor
+
+release:
+  prerelease: auto
+
+dockers:
+  image_templates:
+    - "mactat/framed:latest"
+    - "mactat/framed:{{ .Tag }}"
+  dockerfile: "dockerfiles/dockerfile"
+
+universal_binaries:
+  - replace: true
+
+brews:
+    - name: framed
+      homepage: "https://github.com/mactat/framed"
+      tap:
+        owner: mactat
+        name: homebrew-mactat
+      commit_author:
+        name: mactat
+        email: maciektatarsk@gmail.com
+
+checksum:
+  name_template: 'checksums.txt'
