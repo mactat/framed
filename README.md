@@ -105,7 +105,7 @@ The allowChildren property, when set to true, permits the presence of additional
 1. Open a terminal and run the following command:
 
    ```shell
-   brew ta mactat/mactat
+   brew tap mactat/mactat
    brew install framed
    ```
 
