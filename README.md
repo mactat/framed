@@ -100,11 +100,21 @@ The allowChildren property, when set to true, permits the presence of additional
 
 ## Installation
 
+### Brew Installation
+
+1. Open a terminal and run the following command:
+
+   ```shell
+   brew ta mactat/mactat
+   brew install framed
+   ```
+
 ### Darwin (macOS) Installation
 
 1. Download the `framed-darwin-amd64-<version>.tar.gz` package from release page.
 
 2. Extract the package by double-clicking on the downloaded file or using a tool like `tar` in your terminal:
+
    ```shell
    tar -xzf framed-darwin-amd64-<version>.tar.gz
    ```
@@ -112,16 +122,19 @@ The allowChildren property, when set to true, permits the presence of additional
 3. This will extract the `framed` binary.
 
 4. Open a terminal and navigate to the extracted directory:
+
    ```shell
    cd framed-darwin-amd64-<version>
    ```
 
 5. Make the binary executable by running the following command:
+
    ```shell
    chmod +x framed
    ```
 
 6. Move the `framed` binary to a directory in your system's `PATH` so that it can be accessed from anywhere. For example:
+
    ```shell
    sudo mv framed /usr/local/bin/
    ```
@@ -133,6 +146,7 @@ The allowChildren property, when set to true, permits the presence of additional
 1. Download the `framed-linux-amd64-<version>.tar.gz` package from release page.
 
 2. Extract the package using the following command in your terminal:
+
    ```shell
    tar -xzf framed-linux-amd64-<version>.tar.gz
    ```
@@ -140,16 +154,19 @@ The allowChildren property, when set to true, permits the presence of additional
 3. This will extract the `framed` binary.
 
 4. Open a terminal and navigate to the extracted directory:
+
    ```shell
    cd framed-linux-amd64-<version>
    ```
 
 5. Make the binary executable by running the following command:
+
    ```shell
    chmod +x framed
    ```
 
 6. Move the `framed` binary to a directory in your system's `PATH` so that it can be accessed from anywhere. For example:
+
    ```shell
    sudo mv framed /usr/local/bin/
    ```
@@ -240,6 +257,7 @@ Currently available examples:
 See [examples](./examples) for more details.
 
 ## Running from docker
+
 To run framed from docker, run the following command:
 
 ```bash

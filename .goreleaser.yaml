@@ -9,17 +9,15 @@ builds:
       - arm64
     env:
       - CGO_ENABLED=0
-    flags:
-      - -mod=vendor
 
 release:
   prerelease: auto
 
 dockers:
-  image_templates:
+  - dockerfile: "dockerfiles/goreleaser.dockerfile"
+    image_templates:
     - "mactat/framed:latest"
     - "mactat/framed:{{ .Tag }}"
-  dockerfile: "dockerfiles/dockerfile"
 
 universal_binaries:
   - replace: true
@@ -27,7 +25,7 @@ universal_binaries:
 brews:
     - name: framed
       homepage: "https://github.com/mactat/framed"
-      tap:
+      repository:
         owner: mactat
         name: homebrew-mactat
       commit_author:
