@@ -8,6 +8,10 @@ Framed is a CLI tool that simplifies the organization and management of files an
 
 To always be in sync with the YAML template, Framed provides a built-in test command that can be used in CI/CD pipelines to verify the project structure.
 
+## Demo
+
+![Demo](./docs/static/demo.gif)
+
 ## Features
 
 - **YAML Templates**: Framed uses YAML templates to define the entire project structure.
@@ -272,9 +276,6 @@ docker run --rm -v $(pwd):/app --user $(id -u):$(id -g) mactat/framed framed imp
 
 Images can be found on [dockerhub](https://hub.docker.com/r/mactat/framed).
 
-## Demo
-
-![Demo](./docs/static/demo.gif)
 
 ## Github Action
 
