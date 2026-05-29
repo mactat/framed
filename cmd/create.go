@@ -7,6 +7,7 @@ package cmd
 
 import (
 	"framed/pkg/ext"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -21,18 +22,12 @@ Example:
 framed create --template ./framed.yaml --files true
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		path := cmd.Flag("template").Value.String()
-		createFiles := cmd.Flag("files").Value.String() == "true"
-
-		// read config
-		_, dirList := ext.ReadConfig(path)
-
-		// create directories
-		ext.CreateAllDirs(dirList)
-
-		// create files
-		if createFiles {
-			ext.CreateAllFiles(dirList)
+		opts := ext.CreateOptions{
+			TemplatePath: cmd.Flag("template").Value.String(),
+			CreateFiles:  cmd.Flag("files").Value.String() == "true",
+		}
+		if _, err := ext.Create(opts); err != nil {
+			os.Exit(1)
 		}
 	},
 }

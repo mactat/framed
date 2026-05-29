@@ -18,71 +18,27 @@ var testCmd = &cobra.Command{
 	Use:   "verify",
 	Short: "Verify the project rules and structure",
 	Long: `This command is verifying the project structure for consistency and compliance with the YAML template.
-	
+
 Example:
 framed verify --template ./framed.yaml
 `,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
-		// read config
-		_, dirList := ext.ReadConfig(path)
 
-		allGood := true
-		// verify directories
-		for _, dir := range dirList {
-			if !ext.DirExists(dir.Path) {
-				ext.PrintOut("❌ Directory not found ==>", dir.Path)
-				allGood = false
-			}
-
-			// verify files
-			if dir.Files != nil {
-				ext.VerifyFiles(dir, &allGood)
-			}
-
-			// verify minCount
-			numFiles := ext.CountFiles(dir.Path)
-			if numFiles < dir.MinCount {
-				ext.PrintOut("❌ Min count ("+fmt.Sprint(dir.MinCount)+") not met ==>", dir.Path)
-				allGood = false
-			}
-
-			// verify maxCount
-			if numFiles > dir.MaxCount {
-				ext.PrintOut("❌ Max count ("+fmt.Sprint(dir.MaxCount)+") exceeded ==>", dir.Path)
-				allGood = false
-			}
-
-			// verify childrenAllowed
-			if !dir.AllowChildren {
-				if ext.HasDirs(dir.Path) {
-					ext.PrintOut("❌ Children not allowed ==>", dir.Path)
-					allGood = false
-				}
-			}
-
-			// verify maxDepth
-			if ext.CheckDepth(dir.Path) > dir.MaxDepth {
-				ext.PrintOut("❌ Max depth exceeded ("+fmt.Sprint(dir.MaxDepth)+") ==>", dir.Path)
-				allGood = false
-			}
-
-			// Verify forbidden
-			if dir.ForbiddenPatterns != nil {
-				ext.VerifyForbiddenPatterns(dir, &allGood)
-			}
-
-			// Verify allowed patterns
-			if dir.AllowedPatterns != nil {
-				ext.VerifyAllowedPatterns(dir, &allGood)
-			}
-		}
-
-		if allGood {
-			fmt.Println("✅ Verified successfully!")
-		} else {
+		report, err := ext.Verify(path)
+		if err != nil {
 			os.Exit(1)
 		}
+
+		for _, f := range report.Failures {
+			ext.PrintOut(f.Prompt, f.Detail)
+		}
+
+		if report.OK {
+			fmt.Println("✅ Verified successfully!")
+			return
+		}
+		os.Exit(1)
 	},
 }
 

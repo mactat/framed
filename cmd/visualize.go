@@ -7,6 +7,7 @@ package cmd
 
 import (
 	"framed/pkg/ext"
+	"os"
 
 	"github.com/spf13/cobra"
 )
@@ -21,12 +22,9 @@ Example:
 framed visualize --template ./framed.yaml`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path := cmd.Flag("template").Value.String()
-
-		// read config
-		_, dirList := ext.ReadConfig(path)
-
-		// visualize template
-		ext.VisualizeTemplate(dirList)
+		if err := ext.Visualize(path); err != nil {
+			os.Exit(1)
+		}
 	},
 }
 
