@@ -42,4 +42,5 @@ structure:
           allowedPatterns:
               - ".md"
               - ".txt"
+              - ".tape" # VHS tape for demo recording
         - name: examples
