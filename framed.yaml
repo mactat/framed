@@ -3,7 +3,7 @@ name: framed
 
 structure:
     name: root
-    maxDepth: 5 # Disallow dirs deeper than 5
+    maxDepth: 10
     files:
         - README.md
         - framed.yaml
