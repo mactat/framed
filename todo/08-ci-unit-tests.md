@@ -1,6 +1,6 @@
 # 08 — Extend CI to run Go unit tests
 
-**Status:** open
+**Status:** done
 **Source:** follow-up to [card 06](./06-move-business-logic.md) and
 [card 02](./02-add-tests.md)
 

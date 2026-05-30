@@ -45,10 +45,6 @@ type Config struct {
 	Structure *SingleDir `yaml:"structure"`
 }
 
-// config remains as a backwards-compatible alias for callers in this
-// package that still use the unexported name.
-type config = Config
-
 // ReadConfigE loads a template and returns the parsed config plus the
 // flattened dir list. It returns an error instead of calling os.Exit;
 // the bare ReadConfig wrapper preserves the original exit-on-failure
