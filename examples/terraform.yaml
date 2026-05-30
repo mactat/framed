@@ -1,0 +1,38 @@
+# FRAMED Configuration
+name: terraform_example
+
+structure:
+    name: root
+    maxDepth: 6
+    files:
+        - README.md
+        - .gitignore
+        - .terraform-version
+    dirs:
+        - name: modules
+          minCount: 1
+          allowedPatterns:
+              - "\\.tf$"
+              - "\\.md$"
+          files:
+              - README.md
+        - name: environments
+          dirs:
+              - name: dev
+                allowedPatterns:
+                    - "\\.tf$"
+                    - "\\.tfvars$"
+                files:
+                    - main.tf
+                    - variables.tf
+              - name: prod
+                allowedPatterns:
+                    - "\\.tf$"
+                    - "\\.tfvars$"
+                files:
+                    - main.tf
+                    - variables.tf
+        - name: scripts
+          allowChildren: false
+          allowedPatterns:
+              - "\\.sh$"

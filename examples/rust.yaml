@@ -1,0 +1,28 @@
+# FRAMED Configuration
+name: rust_example
+
+structure:
+    name: root
+    maxDepth: 5
+    files:
+        - README.md
+        - Cargo.toml
+        - Cargo.lock
+        - .gitignore
+    dirs:
+        - name: src
+          minCount: 1
+          allowedPatterns:
+              - "\\.rs$"
+          files:
+              - main.rs
+        - name: tests
+          allowedPatterns:
+              - "\\.rs$"
+        - name: benches
+          maxCount: 10
+          allowedPatterns:
+              - "\\.rs$"
+        - name: examples
+          allowedPatterns:
+              - "\\.rs$"

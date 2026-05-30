@@ -1,0 +1,30 @@
+# FRAMED Configuration
+name: node_example
+
+structure:
+    name: root
+    maxDepth: 5
+    files:
+        - README.md
+        - package.json
+        - tsconfig.json
+        - .gitignore
+    dirs:
+        - name: src
+          minCount: 1
+          allowedPatterns:
+              - "\\.ts$"
+              - "\\.tsx$"
+          forbiddenPatterns:
+              - "\\.test\\.ts$"
+          files:
+              - index.ts
+        - name: tests
+          allowedPatterns:
+              - "\\.test\\.ts$"
+              - "\\.spec\\.ts$"
+        - name: scripts
+          allowChildren: false
+          allowedPatterns:
+              - "\\.js$"
+              - "\\.sh$"

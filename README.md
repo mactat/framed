@@ -257,6 +257,11 @@ Currently available examples:
 
 - python
 - golang
+- node
+- rust
+- terraform
+- monorepo
+- docs-site
 
 See [examples](./examples) for more details.
 
