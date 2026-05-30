@@ -1,6 +1,6 @@
 # 07 — Improve README
 
-**Status:** open
+**Status:** done
 **Source:** added by maintainer (not in README's TODO list)
 
 ## Scope

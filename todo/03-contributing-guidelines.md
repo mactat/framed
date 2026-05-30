@@ -1,6 +1,6 @@
 # 03 — Contributing guidelines
 
-**Status:** open
+**Status:** done
 **Source:** README "TODO"
 
 ## Scope

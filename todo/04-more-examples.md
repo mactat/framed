@@ -1,6 +1,6 @@
 # 04 — More examples
 
-**Status:** open
+**Status:** done
 **Source:** README "TODO"
 
 ## Scope

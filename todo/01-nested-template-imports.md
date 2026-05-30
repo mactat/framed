@@ -1,6 +1,6 @@
 # 01 — Nested template imports
 
-**Status:** open
+**Status:** done
 **Source:** README "TODO" — first item
 
 ## Scope

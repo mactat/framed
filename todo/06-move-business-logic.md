@@ -1,6 +1,6 @@
 # 06 — Move remaining business logic to a separate package
 
-**Status:** open
+**Status:** done
 **Source:** README "TODO" — last item
 
 ## Scope
