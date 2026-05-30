@@ -301,6 +301,12 @@ You can use framed as a github action to verify your project structure. Minimal 
             version: 'v0.0.8'         # Optional, default is v0.0.8
   ```
 
+## Contributing
+
+See [`CONTRIBUTING.md`](./CONTRIBUTING.md) for project layout, local
+dev, and the PR checklist. Open work is tracked under
+[`todo/`](./todo/).
+
 ## TODO
 
 - [ ] Add support from importing part of the structure from url or file like:
