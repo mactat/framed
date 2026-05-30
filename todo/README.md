@@ -15,3 +15,4 @@ One markdown card per item from the README's TODO list. Each card has:
 | 05 | [GitHub Action for tests](./05-github-action-tests.md) | done |
 | 06 | [Move business logic to a package](./06-move-business-logic.md) | done |
 | 07 | [Improve README](./07-improve-readme.md) | done |
+| 08 | [Extend CI to run Go unit tests](./08-ci-unit-tests.md) | open |
