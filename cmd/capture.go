@@ -7,7 +7,6 @@ package cmd
 
 import (
 	"fmt"
-
 	"framed/pkg/ext"
 	"os"
 	"strconv"
@@ -35,20 +34,20 @@ framed capture --output ./framed.yaml --name my-project
 		}
 		ext.PrintOut("📝 Name:", name+"\n")
 
-		// capture subdirectories
-		subdirs := ext.CaptureSubDirs(".", depth)
-		ext.PrintOut("📂 Directories:", fmt.Sprintf("%v", len(subdirs)))
-
-		// capture files
-		files := ext.CaptureAllFiles(".", depth)
-		ext.PrintOut("📄 Files:", fmt.Sprintf("%v", len(files)))
-
-		// capture patterns
-		patterns := ext.CaptureRequiredPatterns(".", depth)
-		ext.PrintOut("🔁 Patterns:", fmt.Sprintf("%v", len(patterns)))
-
-		// export config
-		ext.ExportConfig(name, output, subdirs, files, patterns)
+		opts := ext.CaptureOptions{
+			Name:       name,
+			OutputPath: output,
+			Depth:      depth,
+		}
+		report, err := ext.CaptureWithReporter(opts, func(r ext.CaptureReport) {
+			ext.PrintOut("📂 Directories:", fmt.Sprintf("%v", r.Dirs))
+			ext.PrintOut("📄 Files:", fmt.Sprintf("%v", r.Files))
+			ext.PrintOut("🔁 Patterns:", fmt.Sprintf("%v", r.Patterns))
+		})
+		if err != nil {
+			os.Exit(1)
+		}
+		_ = report
 		ext.PrintOut("\n✅ Exported to file: ", output)
 	},
 }

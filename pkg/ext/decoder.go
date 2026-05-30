@@ -16,6 +16,7 @@ type SingleDir struct {
 	Dirs              *[]SingleDir `yaml:"dirs"`
 	AllowedPatterns   *[]string    `yaml:"allowedPatterns"`
 	ForbiddenPatterns *[]string    `yaml:"forbiddenPatterns"`
+	Template          string       `yaml:"template"`
 	MinCount          int          `default:"0" yaml:"minCount"`
 	MaxCount          int          `default:"1000" yaml:"maxCount"`
 	MaxDepth          int          `default:"1000" yaml:"maxDepth"`
@@ -39,56 +40,66 @@ func (s *SingleDir) UnmarshalYAML(unmarshal func(interface{}) error) error {
 	return nil
 }
 
-type config struct {
+type Config struct {
 	Name      string     `yaml:"name"`
 	Structure *SingleDir `yaml:"structure"`
 }
 
-func ReadConfig(path string) (config, []SingleDir) {
+// ReadConfigE loads a template and returns the parsed config plus the
+// flattened dir list. It returns an error instead of calling os.Exit;
+// the bare ReadConfig wrapper preserves the original exit-on-failure
+// behavior for callers that haven't migrated yet.
+func ReadConfigE(path string) (Config, []SingleDir, error) {
 	yamlFile, err := os.ReadFile(path)
 	if err != nil {
-		// add emoji
 		PrintOut("☠️ Can not read file ==>", path)
-		os.Exit(1)
+		return Config{}, nil, fmt.Errorf("read template %q: %w", path, err)
 	}
 	PrintOut("✅ Loaded template from  ==>", path)
-	// Map to store the parsed YAML data
-	var curConfig config
 
-	// Unmarshal the YAML string into the data map
-	err = yaml.Unmarshal([]byte(yamlFile), &curConfig)
-	if err != nil {
+	var curConfig Config
+	if err := yaml.Unmarshal(yamlFile, &curConfig); err != nil {
 		PrintOut("☠️ Can not decode file ==>", path)
-		os.Exit(1)
+		return Config{}, nil, fmt.Errorf("decode template %q: %w", path, err)
 	}
 
 	if curConfig.Structure == nil {
 		PrintOut("☠️ Can not find correct structure in ==>", path)
-		os.Exit(1)
-	} else {
-		PrintOut("✅ Read structure for ==>", curConfig.Name)
+		return Config{}, nil, fmt.Errorf("template %q has no structure", path)
+	}
+	PrintOut("✅ Read structure for ==>", curConfig.Name)
+
+	if err := resolveImports(curConfig.Structure, path, map[string]bool{}); err != nil {
+		return Config{}, nil, err
 	}
 
 	dirList := []SingleDir{}
 	traverseStructure(curConfig.Structure, ".", &dirList)
-	return curConfig, dirList
+	return curConfig, dirList, nil
+}
+
+// ReadConfig is the legacy entry point — exits the process on error.
+// Prefer ReadConfigE in new code.
+func ReadConfig(path string) (Config, []SingleDir) {
+	cfg, dirs, err := ReadConfigE(path)
+	if err != nil {
+		os.Exit(1)
+	}
+	return cfg, dirs
 }
 
 func traverseStructure(dir *SingleDir, path string, dirsList *[]SingleDir) {
-	// Change path
 	if dir == nil {
 		PrintOut("☠️  Can't traverse nil dir ==>", path)
 		os.Exit(1)
 	}
 	dir.Path = path
 
-	// add current dir to dirsList
 	*dirsList = append(*dirsList, *dir)
 
 	if dir.Dirs == nil {
 		return
 	}
-	// traverse children
 	for _, child := range *dir.Dirs {
 		traverseStructure(&child, path+"/"+child.Name, dirsList)
 	}

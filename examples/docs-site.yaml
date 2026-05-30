@@ -1,0 +1,39 @@
+# FRAMED Configuration
+name: docs_site_example
+
+structure:
+    name: root
+    maxDepth: 5
+    files:
+        - README.md
+        - mkdocs.yml
+        - .gitignore
+    dirs:
+        - name: docs
+          minCount: 1
+          allowedPatterns:
+              - "\\.md$"
+          files:
+              - index.md
+          dirs:
+              - name: guides
+                allowedPatterns:
+                    - "\\.md$"
+              - name: reference
+                allowedPatterns:
+                    - "\\.md$"
+        - name: static
+          dirs:
+              - name: images
+                allowedPatterns:
+                    - "\\.png$"
+                    - "\\.jpg$"
+                    - "\\.svg$"
+              - name: css
+                allowChildren: false
+                allowedPatterns:
+                    - "\\.css$"
+        - name: overrides
+          allowedPatterns:
+              - "\\.html$"
+              - "\\.css$"

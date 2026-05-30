@@ -27,17 +27,14 @@ framed import --example python --output ./python.yaml
 		example := cmd.Flag("example").Value.String()
 		output := cmd.Flag("output").Value.String()
 
-		if url != "" {
-			err := ext.ImportFromUrl(output, url)
-			if err != nil {
+		switch {
+		case url != "":
+			if err := ext.ImportFromUrl(output, url); err != nil {
 				ext.PrintOut("☠️ Failed to import from url ==>", url)
 				os.Exit(1)
 			}
-		}
-
-		if example != "" {
-			err := ext.ImportFromUrl(output, ext.ExampleToUrl(example))
-			if err != nil {
+		case example != "":
+			if err := ext.ImportFromUrl(output, ext.ExampleToUrl(example)); err != nil {
 				ext.PrintOut("☠️ Failed to import from example ==>", example)
 				os.Exit(1)
 			}
@@ -45,10 +42,11 @@ framed import --example python --output ./python.yaml
 
 		ext.PrintOut("✅ Saved to ==>", output)
 
-		// try to load
-		configTree, _ := ext.ReadConfig(output)
+		configTree, _, err := ext.ReadConfigE(output)
+		if err != nil {
+			os.Exit(1)
+		}
 		ext.PrintOut("✅ Imported successfully ==>", configTree.Name)
-
 	},
 }
 

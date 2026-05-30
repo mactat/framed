@@ -1,2 +1,4 @@
 build/
 .vscode/
+test/test_helper/
+.claude/settings.local.json

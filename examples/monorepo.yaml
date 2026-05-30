@@ -1,0 +1,43 @@
+# FRAMED Configuration
+name: monorepo_example
+
+structure:
+    name: root
+    maxDepth: 6
+    files:
+        - README.md
+        - .gitignore
+        - turbo.json
+        - package.json
+    dirs:
+        - name: apps
+          dirs:
+              - name: web
+                files:
+                    - package.json
+                allowedPatterns:
+                    - "\\.json$"
+                    - "\\.md$"
+              - name: api
+                files:
+                    - package.json
+                allowedPatterns:
+                    - "\\.json$"
+                    - "\\.md$"
+        - name: packages
+          dirs:
+              - name: shared
+                files:
+                    - package.json
+                allowedPatterns:
+                    - "\\.json$"
+                    - "\\.md$"
+        - name: tools
+          allowChildren: false
+          allowedPatterns:
+              - "\\.sh$"
+              - "\\.js$"
+        - name: docs
+          maxCount: 20
+          allowedPatterns:
+              - "\\.md$"
